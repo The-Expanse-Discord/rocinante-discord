@@ -1,0 +1,25 @@
+{
+	"name": "@the-expanse-discord/protomolecule",
+	"description": "General purpose bot for The Expanse Discord server.",
+	"version": "3.0.0",
+	"main": "bin/proto.js",
+	"repository": "https://github.com/The-Expanse-Discord/Protomolecule.git",
+	"author": "kata-gatame <nathan@kata.codes>",
+	"license": "MIT",
+	"scripts": {
+		"lint": "eslint ./src/**/*.ts",
+		"build": "tsc -p ./tsconfig.json"
+	},
+	"eslintConfig": {
+		"extends": "@the-expanse-discord/eslint-config-expanse"
+	},
+	"dependencies": {
+		"discord.js": "github:discordjs/discord.js"
+	},
+	"devDependencies": {
+		"@the-expanse-discord/eslint-config-expanse": "github:The-Expanse-Discord/eslint-config-expanse#refine-ruleset",
+		"@types/node": "^12.12.14",
+		"eslint": "^6.7.2",
+		"typescript": "^3.7.2"
+	}
+}
