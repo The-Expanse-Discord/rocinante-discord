@@ -14,6 +14,7 @@
 		"extends": "@the-expanse-discord/eslint-config-expanse"
 	},
 	"dependencies": {
+		"date-fns": "^2.8.1",
 		"discord.js": "github:discordjs/discord.js"
 	},
 	"devDependencies": {

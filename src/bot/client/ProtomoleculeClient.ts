@@ -1,13 +1,13 @@
-import { ActivityType, Client, ClientOptions } from 'discord.js';
+/* eslint-disable max-lines-per-function */
+
+import * as Path from 'path';
+import { ActivityType, Client, ClientOptions, Collection } from 'discord.js';
+import { Command } from '../../lib/classes/Command';
+import { CommandManager } from '../managers/CommandManager';
 import EventManager from '../managers/EventManager';
 import config = require('./config.json');
 
 export default class ProtomoleculeClient extends Client {
-	/**
-	 * Discord bot token.
-	 */
-	private readonly botToken!: string;
-
 	/*
 	 * Command prefix.
 	 */
@@ -29,6 +29,16 @@ export default class ProtomoleculeClient extends Client {
 	public events: EventManager;
 
 	/**
+	 * Command Manager for the bot.
+	 */
+	public commandManager: CommandManager;
+
+	/**
+	 * Discord commands.
+	 */
+	public commands: Collection<string, Command>;
+
+	/**
 	 * Default constructor for {@link Protomolecule}, the Discord client.
 	 *
 	 * @returns - The Discord client.
@@ -37,7 +47,7 @@ export default class ProtomoleculeClient extends Client {
 		super(clientOptions);
 
 		// Set the token
-		this.botToken = config.token;
+		this.token = config.token;
 
 		// Set the prefix
 		this.prefix = config.commandPrefix;
@@ -50,6 +60,12 @@ export default class ProtomoleculeClient extends Client {
 
 		// Create Event listner instance
 		this.events = new EventManager(this);
+
+		// Initialize the Command Manager
+		this.commandManager = new CommandManager(this);
+
+		// Initialize commands Collection
+		this.commands = new Collection;
 	}
 
 	/**
@@ -74,11 +90,25 @@ export default class ProtomoleculeClient extends Client {
 			return;
 		}
 
-		// Login to Discord
-		await this.login(this.botToken);
+		if (this.token) {
+			// Login to Discord
+			await this.login(this.token);
 
-		// TODO replace with logger instance
-		// eslint-disable-next-line no-console
-		console.log('Logged in');
+			// TODO replace with logger instance
+			// eslint-disable-next-line no-console
+			console.log('Logged in');
+		} else
+			// TODO replace with logger instance
+			// eslint-disable-next-line no-console
+			console.log('No token present');
+
+		// Load commands
+		try {
+			this.commandManager.init(Path.join(__dirname, '../commands'));
+		} catch (error) {
+			// TODO replace with logger instance
+			// eslint-disable-next-line no-console
+			console.log('Unable to load commands');
+		}
 	}
 }

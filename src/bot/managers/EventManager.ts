@@ -1,4 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable max-lines-per-function */
+
 import { Event } from '../../lib/util/Enums';
+import { Message } from 'discord.js';
 import ProtomoleculeClient from '../client/ProtomoleculeClient';
 
 /**
@@ -31,6 +36,29 @@ export default class EventManager {
 			// Set the Discord status text
 			if (this.client.user)
 				await this.client.user.setActivity(this.client.statusText, { type: this.client.statusType });
+		});
+
+		// On message
+		this.client.on(Event.Message, (message: Message) => {
+			/*
+			 * Disregard any message that doesn't start with the command prefix.
+			 * disregard any message sent from a bot.
+			 */
+			if (!message.content.startsWith(this.client.prefix) || message.author.bot)
+				return;
+
+			// Slice the message into arguments
+			const args: string[] = message.content.slice(this.client.prefix.length).split(/ +/);
+
+			// Normalize the command text
+			let issuedCommand: string | undefined = args.shift();
+			issuedCommand = issuedCommand ? issuedCommand.toLowerCase() : '';
+
+			// Does the command exist?
+			const fetchedCommand: boolean = Boolean(this.client.commands.get(issuedCommand));
+
+			if (fetchedCommand)
+				this.client.commands.get(issuedCommand)!.execute(message, args);
 		});
 
 		// On disconnect
