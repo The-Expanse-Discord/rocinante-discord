@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-prototype-builtins */
 
 import * as fs from 'fs';
@@ -54,7 +53,7 @@ export class CommandManager {
 				if (!file.endsWith('.js'))
 					return;
 
-				const command: any = require(`${ fullPath }`);
+				const command: Command = require(`${ fullPath }`);
 				const commandClasses: (new () => Command)[] = Util.findCommandClasses(command);
 
 				if (commandClasses.length !== 0)

@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable max-lines-per-function */
 
+import { Command } from '../../lib/classes/Command';
 import { Event } from '../../lib/util/Enums';
 import { Message } from 'discord.js';
 import ProtomoleculeClient from '../client/ProtomoleculeClient';
@@ -39,7 +38,7 @@ export default class EventManager {
 		});
 
 		// On message
-		this.client.on(Event.Message, (message: Message) => {
+		this.client.on(Event.Message, async(message: Message) => {
 			/*
 			 * Disregard any message that doesn't start with the command prefix.
 			 * disregard any message sent from a bot.
@@ -55,10 +54,10 @@ export default class EventManager {
 			issuedCommand = issuedCommand ? issuedCommand.toLowerCase() : '';
 
 			// Does the command exist?
-			const fetchedCommand: boolean = Boolean(this.client.commands.get(issuedCommand));
+			const fetchedCommand: Command | undefined = this.client.commands.get(issuedCommand);
 
 			if (fetchedCommand)
-				this.client.commands.get(issuedCommand)!.execute(message, args);
+				await fetchedCommand.execute(message, args);
 		});
 
 		// On disconnect
