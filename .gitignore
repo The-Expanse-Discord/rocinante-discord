@@ -8,5 +8,8 @@ bin/
 ## dependencies
 node_modules/
 
+## Configuration
+config.json
+
 ## misc
 src/bot/client/config.dev.json

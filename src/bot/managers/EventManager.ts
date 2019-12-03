@@ -33,8 +33,9 @@ export default class EventManager {
 		// On ready
 		this.client.once(Event.Ready, async() => {
 			// Set the Discord status text
-			if (this.client.user)
+			if (this.client.user) {
 				await this.client.user.setActivity(this.client.statusText, { type: this.client.statusType });
+			}
 		});
 
 		// On message

@@ -5,7 +5,7 @@ import { ActivityType, Client, ClientOptions, Collection } from 'discord.js';
 import { Command } from '../../lib/classes/Command';
 import { CommandManager } from '../managers/CommandManager';
 import EventManager from '../managers/EventManager';
-import config = require('./config.json');
+import config from '../config';
 
 export default class ProtomoleculeClient extends Client {
 	/*

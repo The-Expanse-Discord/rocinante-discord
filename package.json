@@ -14,11 +14,13 @@
 		"extends": "@the-expanse-discord/eslint-config-expanse"
 	},
 	"dependencies": {
-		"discord.js": "github:discordjs/discord.js"
+		"discord.js": "github:discordjs/discord.js",
+		"yargs": "^15.0.2"
 	},
 	"devDependencies": {
 		"@the-expanse-discord/eslint-config-expanse": "github:The-Expanse-Discord/eslint-config-expanse#refine-ruleset",
 		"@types/node": "^12.12.14",
+		"@types/yargs": "^13.0.3",
 		"eslint": "^6.7.2",
 		"typescript": "^3.7.2"
 	}
