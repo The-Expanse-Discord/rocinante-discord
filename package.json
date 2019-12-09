@@ -5,6 +5,7 @@
 	"main": "bin/proto.js",
 	"repository": "https://github.com/The-Expanse-Discord/Protomolecule.git",
 	"author": "kata-gatame <nathan@kata.codes>",
+	"contributors": [ { "name": "John Daniels", "url": "https://github.com/johndaniels" } ],
 	"license": "MIT",
 	"scripts": {
 		"lint": "eslint ./src/**/*.ts",
