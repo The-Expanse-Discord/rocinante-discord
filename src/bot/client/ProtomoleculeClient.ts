@@ -1,11 +1,9 @@
-/* eslint-disable max-lines-per-function */
-
 import * as Path from 'path';
 import { ActivityType, Client, ClientOptions, Collection } from 'discord.js';
 import { Command } from '../../lib/classes/Command';
 import { CommandManager } from '../managers/CommandManager';
 import EventManager from '../managers/EventManager';
-import config = require('./config.json');
+import config from './Config';
 
 export default class ProtomoleculeClient extends Client {
 	/*
@@ -94,11 +92,9 @@ export default class ProtomoleculeClient extends Client {
 			// Login to Discord
 			await this.login(this.token);
 
-			// TODO replace with logger instance
 			// eslint-disable-next-line no-console
 			console.log('Logged in');
 		} else
-			// TODO replace with logger instance
 			// eslint-disable-next-line no-console
 			console.log('No token present');
 
@@ -106,7 +102,6 @@ export default class ProtomoleculeClient extends Client {
 		try {
 			this.commandManager.init(Path.join(__dirname, '../commands'));
 		} catch (error) {
-			// TODO replace with logger instance
 			// eslint-disable-next-line no-console
 			console.log('Unable to load commands');
 		}

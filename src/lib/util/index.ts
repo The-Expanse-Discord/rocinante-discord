@@ -4,6 +4,17 @@
 import { Command } from '../classes/Command';
 
 export class Util {
+
+	/**
+	 * Gets the specified key from a JSON, raising an exception if the value is null/undefined
+	 */
+	public static getNonNull(jsonObject: {[key: string]: string}, key: string): string {
+		if (!(key in jsonObject))
+			throw new Error(`Missing required configuration key: ${ key }`);
+
+		return jsonObject[key];
+	}
+
 	/**
 	 * Flatten an array that may contain nested arrays.
 	 *

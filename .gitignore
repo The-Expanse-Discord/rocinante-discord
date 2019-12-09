@@ -1,5 +1,4 @@
 ## editor settings
-.vs/
 .vscode/
 
 ## production
@@ -8,5 +7,5 @@ bin/
 ## dependencies
 node_modules/
 
-## misc
-src/bot/client/config.dev.json
+## Configuration
+config.json
