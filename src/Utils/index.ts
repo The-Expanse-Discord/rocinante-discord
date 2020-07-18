@@ -1,13 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-prototype-builtins */
 
-import { Command } from '../classes/Command';
+import { Command } from '../Infrastructure/System/Command';
 
+/**
+ * @category Util
+ */
 export class Util {
-
-	/**
-	 * Gets the specified key from a JSON, raising an exception if the value is null/undefined
-	 */
 	public static getNonNull(jsonObject: {[key: string]: string}, key: string): string {
 		if (!(key in jsonObject))
 			throw new Error(`Missing required configuration key: ${ key }`);
@@ -15,32 +12,19 @@ export class Util {
 		return jsonObject[key];
 	}
 
-	/**
-	 * Flatten an array that may contain nested arrays.
-	 *
-	 * @param array - The array to flatten
-	 *
-	 * @returns - The flattened array.
-	 */
 	public static flattenArray<T>(array: (T | T[])[]): T[] {
 		const result: T[] = [];
 
 		for (const item of array)
 			if (item instanceof Array)
-				result.push(...Util.flattenArray(item));
+				result.push(...this.flattenArray(item));
 			else
 				result.push(item);
 
 		return result;
 	}
 
-	/**
-	 * Recursively search for Command classes within the given object.
-	 *
-	 * @param obj - The object to search for Command classes in.
-	 *
-	 * @returns - The flattened array of found Command classes.
-	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public static findCommandClasses(obj: any): any {
 		const foundClasses: Command[] = [];
 		const keys: string[] = Object.keys(obj);
@@ -52,6 +36,6 @@ export class Util {
 				if (Command.prototype.isPrototypeOf(obj[key].prototype))
 					foundClasses.push(this.findCommandClasses(obj[key]));
 
-		return Util.flattenArray(foundClasses);
+		return this.flattenArray(foundClasses);
 	}
 }

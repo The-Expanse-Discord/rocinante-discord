@@ -6,6 +6,7 @@
 		"rootDir": "./src",
 		"outDir": "./bin",
 		"declaration": true,
+		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
@@ -16,5 +17,29 @@
 		"strict": true
 	},
 	"include": [ "./src/**/*" ],
-	"exclude": [ "./bin/**/*", "./node_modules/**/*" ]
+	"exclude": [ "./bin/**/*", "./node_modules/**/*" ],
+    "typedocOptions": {
+		"mode": "file",
+		"out": "docs",
+		"exclude": [ "node_modules/**/*" ],
+		"excludeExternals": true,
+		"stripInternal": true,
+		"name": "Project RUBICON",
+		"includeVersion": true,
+		"theme": "minimal",
+		"toc": [
+			"Agent",
+			"Command",
+			"Player",
+			"Weapon"
+		],
+		"categoryOrder": [
+			"Commands: Game Data",
+			"Commands: System",
+			"Player Data",
+			"Game Data",
+			"*"
+		],
+		"hideGenerator": true
+    }
 }

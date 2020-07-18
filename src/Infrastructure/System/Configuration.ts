@@ -1,5 +1,8 @@
-import { Util } from '../util';
+import { Util } from '../../Utils';
 
+/**
+ * @category System
+ */
 export default class Configuration {
 	public readonly token: string;
 	public readonly owner: string;
@@ -7,6 +10,7 @@ export default class Configuration {
 	public readonly statusType: string;
 	public readonly statusText: string;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public constructor(jsonObject: {}) {
 		this.token = Util.getNonNull(jsonObject, 'token');
 		this.owner = Util.getNonNull(jsonObject, 'owner');

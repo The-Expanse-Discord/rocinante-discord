@@ -1,11 +1,9 @@
-## editor settings
-.vscode/
-
-## production
-bin/
-
-## dependencies
+# Dependency directories
 node_modules/
 
-## Configuration
-config.json
+# Production files
+bin/
+
+# Configuration Files
+ormconfig.json
+src/Infrastructure/Client/config.json
