@@ -7,4 +7,5 @@ export interface CommandInfo {
 	description: string;
 	usage: string;
 	group: string[];
+	roles: string[];
 }

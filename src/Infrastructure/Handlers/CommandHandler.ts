@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Command } from '../System/Command';
-import { Message } from 'discord.js';
-import { Util } from '../../Utils';
+import { Message, GuildMember } from 'discord.js';
+import { System } from '../../Utils';
 import Protomolecule from '../Client/Protomolecule';
 
 /**
@@ -28,8 +28,9 @@ export class CommandHandler {
 
 		const fetchedCommand: Command | undefined = this.client.commands.get(issuedCommand);
 
-		if (fetchedCommand)
-			await fetchedCommand.execute(message, args);
+		if (fetchedCommand && message.member)
+			if (fetchedCommand.roles.length === 0 || this.hasRoles(message.member, fetchedCommand))
+				await fetchedCommand.execute(message, args);
 	}
 
 	private registerCommands(dir: string): void {
@@ -42,7 +43,7 @@ export class CommandHandler {
 					return;
 
 				const command: Command = require(`${ fullPath }`);
-				const commandClasses: (new () => Command)[] = Util.findCommandClasses(command);
+				const commandClasses: (new () => Command)[] = System.findCommandClasses(command);
 
 				if (commandClasses.length !== 0)
 					for (const commandClass of commandClasses) {
@@ -59,5 +60,11 @@ export class CommandHandler {
 					}
 			}
 		});
+	}
+
+	private hasRoles(member: GuildMember, command: Command): boolean {
+		if (member.roles.cache.filter(role => command.roles.includes(role.name)).size > 0)
+			return true;
+		return false;
 	}
 }

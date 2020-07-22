@@ -1,0 +1,67 @@
+[
+	{
+		"id": "1",
+		"title": "Leviathan Wakes",
+		"isNovella": "false"
+	}, {
+		"id": "2",
+		"title": "Caliban's War",
+		"isNovella": "false"
+	}, {
+		"id": "3",
+		"title": "Abaddon's Gate",
+		"isNovella": "false"
+	}, {
+		"id": "4",
+		"title": "Cibola Burn",
+		"isNovella": "false"
+	}, {
+		"id": "5",
+		"title": "Nemesis Games",
+		"isNovella": "false"
+	}, {
+		"id": "6",
+		"title": "Babylon's Ashes",
+		"isNovella": "false"
+	}, {
+		"id": "7",
+		"title": "Persepolis Rising",
+		"isNovella": "false"
+	}, {
+		"id": "8",
+		"title": "Tiamat's Wrath",
+		"isNovella": "false"
+	}, {
+		"id": "9",
+		"title": "TBD",
+		"isNovella": "false"
+	}, {
+		"id": "10",
+		"title": "The Butcher of Anderson Station",
+		"isNovella": "true"
+	}, {
+		"id": "11",
+		"title": "Gods of Risk",
+		"isNovella": "true"
+	}, {
+		"id": "12",
+		"title": "Drive",
+		"isNovella": "true"
+	}, {
+		"id": "13",
+		"title": "The Churn",
+		"isNovella": "true"
+	}, {
+		"id": "14",
+		"title": "The Vital Abyss",
+		"isNovella": "true"
+	}, {
+		"id": "15",
+		"title": "Strange Dogs",
+		"isNovella": "true"
+	}, {
+		"id": "16",
+		"title": "Auberon",
+		"isNovella": "true"
+	}
+]

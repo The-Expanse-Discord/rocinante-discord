@@ -12,11 +12,13 @@ export abstract class Command<T extends Protomolecule = Protomolecule> {
 
 	public command!: string[];
 
-	public desription!: string;
+	public description!: string;
 
 	public usage!: string;
 
 	public group!: string[];
+
+	public roles!: string[];
 
 	public constructor(info?: CommandInfo) {
 		if (info)

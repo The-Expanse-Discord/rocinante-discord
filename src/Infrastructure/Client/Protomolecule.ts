@@ -4,6 +4,7 @@ import { Command } from '../System/Command';
 import { CommandHandler, EventHandler } from '../Handlers';
 import { configDiscordClient } from './Config';
 import { getConnectionOptions, Connection, createConnection, ConnectionOptions } from 'typeorm';
+import { DatabaseSource } from '../Interfaces/System';
 
 /**
  * ## Protomolecule
@@ -14,6 +15,7 @@ import { getConnectionOptions, Connection, createConnection, ConnectionOptions }
 export default class Protomolecule extends Client {
 	public readonly prefix: string;
 
+	public id: string | undefined;
 	public statusType: ActivityType;
 	public statusText: string;
 
@@ -53,6 +55,8 @@ export default class Protomolecule extends Client {
 
 		if (this.token) {
 			await this.login(this.token);
+			this.id = this.user ? this.user.id : undefined;
+
 			console.log('Logged in');
 		} else
 			console.log('No token present');
@@ -66,12 +70,15 @@ export default class Protomolecule extends Client {
 
 	private async connectDatabase(): Promise<Connection> {
 		const target: ConnectionOptions = await getConnectionOptions();
-		const source: { entities: string[]; migrations: string[] } = {
+		const source: DatabaseSource = {
 			entities: [
 				Path.join(__dirname, '..\\Entities', '*.{js,ts}')
 			],
 			migrations: [
 				Path.join(__dirname, '..\\Database\\Migrations', '*.{js,ts}')
+			],
+			subscriber: [
+				Path.join(__dirname, '..\\Database\\Subscriber', '*.{js,ts}')
 			]
 		};
 

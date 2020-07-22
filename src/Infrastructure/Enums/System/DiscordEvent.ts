@@ -2,14 +2,13 @@
  * ## Discord Event
  * Represents Discord events that Protomolecule listens for.
  *
- * `ready`, `message`, `disconnect`, `messageReactionAdd`, `messageReactionRemove`
+ * `raw`, `ready`, `message`, `disconnect`
  *
  * @category System
  */
 export enum DiscordEvent {
+	Raw = 'raw',
 	Ready = 'ready',
 	Message = 'message',
-	Disconnect = 'disconnect',
-	ReactionAdd = 'messageReactionAdd',
-	ReactionRemove = 'messageReactionRemove'
+	Disconnect = 'disconnect'
 }

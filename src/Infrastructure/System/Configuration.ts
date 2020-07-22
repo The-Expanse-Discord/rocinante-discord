@@ -1,4 +1,4 @@
-import { Util } from '../../Utils';
+import { System } from '../../Utils';
 
 /**
  * @category System
@@ -11,11 +11,11 @@ export default class Configuration {
 	public readonly statusText: string;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	public constructor(jsonObject: {}) {
-		this.token = Util.getNonNull(jsonObject, 'token');
-		this.owner = Util.getNonNull(jsonObject, 'owner');
-		this.commandPrefix = Util.getNonNull(jsonObject, 'commandPrefix');
-		this.statusType = Util.getNonNull(jsonObject, 'statusType');
-		this.statusText = Util.getNonNull(jsonObject, 'statusText');
+	public constructor(jsonObject: { [key: string]: string}) {
+		this.token = System.getNonNull(jsonObject, 'token');
+		this.owner = System.getNonNull(jsonObject, 'owner');
+		this.commandPrefix = System.getNonNull(jsonObject, 'commandPrefix');
+		this.statusType = System.getNonNull(jsonObject, 'statusType');
+		this.statusText = System.getNonNull(jsonObject, 'statusText');
 	}
 }
