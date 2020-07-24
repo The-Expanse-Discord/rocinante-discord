@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { DiscordEvent } from '../Enums/System';
-import { Message, Guild, Role, GuildMember } from 'discord.js';
+import { Message, MessageReaction, PartialUser, User } from 'discord.js';
 import Protomolecule from '../Client/Protomolecule';
-import { System } from '../../Utils';
-import { Raw } from '../Interfaces/Events';
 import { ReactionMessage } from '../Entities';
 import { RoleCategory } from '../Enums/Role Assignment';
 import { Repository } from 'typeorm';
@@ -52,29 +50,27 @@ export class EventHandler {
 			await this.client.commandHandler!.processCommand(message);
 		});
 
-		this.client.on(DiscordEvent.Raw, async(raw: Raw) => {
-			if ((raw.t === 'MESSAGE_REACTION_ADD' || raw.t === 'MESSAGE_REACTION_REMOVE') &&
-					raw.d.user_id !== this.client.id) {
-				if (!this.reactionMessages.includes(raw.d.message_id))
-					return;
+		this.client.on(DiscordEvent.AddReaction,
+			async(reaction: MessageReaction, _user: User | PartialUser): Promise<void> => {
+				if (reaction.partial)
+					try {
+						await reaction.fetch();
+					} catch (error) {
+						console.log('Something went wrong when fetching the message: ', error);
+						return;
+					}
+			});
 
-				const action: string = raw.t;
-
-				const guild: Guild | null = this.client.guilds.resolve(raw.d.guild_id);
-
-				const roleName: string[] | null = raw.d.emoji.name.match(/[A-Z][a-z]+|[0-9]+/g);
-
-				let role: Role | undefined;
-
-				const member: GuildMember | undefined = guild ? await guild.members.fetch(raw.d.user_id) : undefined;
-
-				if (guild && roleName)
-					role = guild.roles.cache.find(r => r.name.replace('\'', '').includes(roleName.join(' ')));
-
-				if (role && member)
-					System.processReaction(action, role, member);
-			}
-		});
+		this.client.on(DiscordEvent.RemoveReaction,
+			async(reaction: MessageReaction, _user: User | PartialUser): Promise<void> => {
+				if (reaction.partial)
+					try {
+						await reaction.fetch();
+					} catch (error) {
+						console.log('Something went wrong when fetching the message: ', error);
+						return;
+					}
+			});
 
 		this.client.on(DiscordEvent.Disconnect, () => {
 			process.exit(100);

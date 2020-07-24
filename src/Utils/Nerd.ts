@@ -1,11 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MessageEmbed } from 'discord.js';
-import { APoDContent, RequestOptions, Comic } from '../Infrastructure/Interfaces/Nerd';
+import { APoDContent, Comic } from '../Infrastructure/Interfaces/Nerd';
 import constants from './Constants';
-import * as cheerio from 'cheerio';
-import * as req from 'request-promise';
+import { load } from 'cheerio';
+import get, { AxiosResponse } from 'axios';
 
 export class Nerd {
+	public static isNumerical(s: string | number): s is number {
+		return !Number.isNaN(Number(s.toString()));
+	}
+
 	private static getRandomApodUri(): string {
 		const now: Date = new Date;
 		const min: number = new Date(1995, 5, 16).getTime();
@@ -37,42 +40,16 @@ export class Nerd {
 
 	public static async fetchApod(isRandom: boolean): Promise<MessageEmbed> {
 		const uri: string = isRandom ? this.getRandomApodUri() : constants.urlApod;
+		const html: AxiosResponse = await get(uri);
 
-		const options: RequestOptions = {
-			uri,
-			headers: [ { Connection: 'keep-alive' } ],
-			json: true
-		};
+		const apod: APoDContent = this.processApod(html, uri);
 
-		const embed: MessageEmbed = await new Promise<MessageEmbed>((resolve, reject): void => {
-			req(options)
-				.then((body: string): void => {
-					const item: APoDContent = this.processApod(cheerio.load(body), uri);
-					resolve(this.createApodEmbed(item));
-				})
-				.catch((err?: unknown): void => {
-					reject(err);
-				});
-		});
-
-		return embed;
+		return this.createApodEmbed(apod);
 	}
 
-	private static createApodEmbed(item: APoDContent): MessageEmbed {
-		const embed: MessageEmbed = new MessageEmbed;
-		embed.setColor('#ec1c24');
-		embed.setAuthor(item.title);
-		embed.setDescription(item.desc);
-		embed.setFooter(`NASA Astronomy Picture of the Day`);
-		if (item.img)
-			embed.setImage(item.img);
-		if (item.video)
-			embed.addField('Video Content', item.video, true);
+	private static processApod(html: AxiosResponse, uri: string): APoDContent {
+		const $: CheerioStatic = load(html.data);
 
-		return embed;
-	}
-
-	private static processApod($: CheerioStatic, uri: string): APoDContent {
 		const title: string = $('center + center > b:first-child')
 			.text()
 			.trim();
@@ -107,34 +84,25 @@ export class Nerd {
 		};
 	}
 
-	private static async fetchCurrentComicCount(): Promise<number> {
-		const options: RequestOptions = {
-			uri: constants.rssFeedXkcd,
-			headers: [ { Connection: 'keep-alive' } ],
-			json: true
-		};
+	private static createApodEmbed(item: APoDContent): MessageEmbed {
+		const embed: MessageEmbed = new MessageEmbed;
+		embed.setColor('#ec1c24');
+		embed.setAuthor(item.title);
+		embed.setDescription(item.desc);
+		embed.setFooter(`NASA Astronomy Picture of the Day`);
+		if (item.img)
+			embed.setImage(item.img);
+		if (item.video)
+			embed.addField('Video Content', item.video, true);
 
-		const result: number = await new Promise<number>((resolve, reject): void => {
-			req(options)
-				.then((item: Comic): void => {
-					resolve(item.num);
-				})
-				.catch((err?): void => {
-					reject(err);
-				});
-		});
-
-		return result;
+		return embed;
 	}
 
-	public static async fetchComic(
-		n?: number,
-		isRandom?: boolean
-	): Promise<MessageEmbed> {
+	public static async fetchComic(n?: number, isRandom?: boolean): Promise<MessageEmbed | string> {
 		let uri: string = constants.rssFeedXkcd;
+		const currentComicCount: number = await this.fetchCurrentComicCount();
 
 		if (isRandom) {
-			const currentComicCount: number = await this.fetchCurrentComicCount();
 			const randomComicNumber: number = Math.floor(
 				Math.random() * currentComicCount + 1
 			);
@@ -144,21 +112,20 @@ export class Nerd {
 		if (n)
 			uri = `${ constants.urlXkcd }/${ n }/info.0.json`;
 
-		const options: RequestOptions = {
-			uri,
-			headers: [ { Connection: 'keep-alive' } ],
-			json: true
-		};
+		if (n && n > currentComicCount)
+			return `\`${ n }\` exceeds the current maximum amount of comics, \`${ currentComicCount }\`.`;
 
-		return new Promise((resolve, reject): void => {
-			req(options)
-				.then((item: Comic): void => {
-					resolve(this.createXkcdEmbed(item));
-				})
-				.catch((err?: string | undefined): void => {
-					reject(err);
-				});
-		});
+		const response: AxiosResponse = await get(uri);
+		const comic: Comic = response.data;
+
+		return this.createXkcdEmbed(comic);
+	}
+
+	private static async fetchCurrentComicCount(): Promise<number> {
+		const response: AxiosResponse = await get(constants.rssFeedXkcd);
+		const result: number = response.data.num;
+
+		return result;
 	}
 
 	private static createXkcdEmbed(item: Comic): MessageEmbed {
@@ -167,9 +134,5 @@ export class Nerd {
 			.setURL(`${ constants.urlXkcd }${ item.num }/`)
 			.setImage(item.img)
 			.setFooter(item.alt);
-	}
-
-	public static isNumerical(s: string | number): s is number {
-		return !Number.isNaN(Number(s.toString()));
 	}
 }

@@ -5,39 +5,32 @@
 	"version": "1.0.0",
 	"license": "MIT",
 	"author": "kata-gatame <nathan@kata.codes>",
+	"contributors": [ "John Daniels (https://github.com/johndaniels)" ],
 	"repository": "https://github.com/The-Expanse-Discord/Protomolecule.git",
 	"homepage": "https://github.com/The-Expanse-Discord/Protomolecule#readme",
 	"bugs": "https://github.com/The-Expanse-Discord/Protomolecule/issues",
 	"scripts": {
 		"code:lint": "eslint ./src/**/*.ts",
 		"code:build": "tsc -p ./tsconfig.json",
-		"db:seedBooks": "ts-node ./src/Infrastructure/Database/Inserts/Expanse/Books.ts",
-		"db:seedCharacters": "ts-node ./src/Infrastructure/Database/Inserts/Expanse/Characters.ts",
-		"db:seedQuoteSources": "ts-node ./src/Infrastructure/Database/Inserts/Expanse/QuoteSources.ts",
-		"db:seedQuotes": "ts-node ./src/Infrastructure/Database/Inserts/Expanse/Quotes.ts",
-		"db:seedReactionCategories": "ts-node ./src/Infrastructure/Database/Inserts/System/ReactionCategories.ts",
-		"db:seed": "npm run db:seedBooks && npm run db:seedCharacters && npm run db:seedQuoteSources && npm run db:seedQuotes && npm run db:seedReactionCategories",
 		"docs:build": "typedoc"
 	},
 	"eslintConfig": {
 		"extends": "@kata-codes/eslint-config"
 	},
 	"dependencies": {
+		"axios": "^0.19.2",
 		"cheerio": "^1.0.0-rc.3",
-		"discord.js": "github:discordjs/discord.js",
+		"discord.js": "^12.2.0",
 		"pg": "^8.3.0",
 		"reflect-metadata": "^0.1.13",
-		"request": "^2.88.2",
-		"request-promise": "^4.2.6",
 		"typeorm": "^0.2.25",
 		"yargs": "^15.4.1"
 	},
 	"devDependencies": {
 		"@kata-codes/eslint-config": "github:kata-codes/eslint-config",
 		"@types/cheerio": "^0.22.21",
-		"@types/node": "^14.0.24",
+		"@types/node": "^14.0.26",
 		"@types/pg": "^7.14.4",
-		"@types/request-promise": "^4.1.46",
 		"@types/yargs": "^15.0.5",
 		"eslint": "^7.5.0",
 		"ts-node": "^8.10.2",
