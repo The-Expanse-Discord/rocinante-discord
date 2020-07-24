@@ -1,7 +1,7 @@
 {
 	"name": "@the-expanse-discord/protomolecule",
 	"description": "General purpose bot for The Expanse Discord server.",
-	"version": "3.0.0",
+	"version": "0.1.0",
 	"main": "bin/proto.js",
 	"repository": "https://github.com/The-Expanse-Discord/Protomolecule.git",
 	"author": "kata-gatame <nathan@kata.codes>",
