@@ -1,7 +1,0 @@
-{
-    "token": "<bot token>",
-    "owner": "<owner id>",
-    "commandPrefix": ".",
-	"statusType": "WATCHING",
-    "statusText": "you sleep..."
-}

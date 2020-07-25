@@ -1,0 +1,7 @@
+{
+	"token": "<bot token>",
+	"owner": "<owner discord id>",
+	"commandPrefix": ".",
+	"statusType": "WATCHING",
+	"statusText": "you sleep..."
+}

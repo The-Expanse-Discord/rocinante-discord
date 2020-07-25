@@ -1,33 +1,41 @@
 {
 	"name": "@the-expanse-discord/protomolecule",
 	"description": "General purpose bot for The Expanse Discord server.",
-	"version": "0.1.0",
-	"main": "bin/proto.js",
-	"repository": "https://github.com/The-Expanse-Discord/Protomolecule.git",
-	"author": "kata-gatame <nathan@kata.codes>",
-	"contributors": [
-		{
-			"name": "John Daniels",
-			"url": "https://github.com/johndaniels"
-		}
-	],
+	"main": "bin/index.js",
+	"version": "1.0.0",
 	"license": "MIT",
+	"author": "kata-gatame <nathan@kata.codes>",
+	"contributors": [ "John Daniels (https://github.com/johndaniels)" ],
+	"repository": "https://github.com/The-Expanse-Discord/Protomolecule.git",
+	"homepage": "https://github.com/The-Expanse-Discord/Protomolecule#readme",
+	"bugs": "https://github.com/The-Expanse-Discord/Protomolecule/issues",
 	"scripts": {
-		"lint": "eslint ./src/**/*.ts",
-		"build": "tsc -p ./tsconfig.json"
+		"code:lint": "eslint ./src/**/*.ts",
+		"code:build": "tsc -p ./tsconfig.json",
+		"docs:build": "typedoc",
+		"db:seed": "ts-node ./src/Infrastructure/Database/Inserts/index.ts"
 	},
 	"eslintConfig": {
-		"extends": "@the-expanse-discord/eslint-config-expanse"
+		"extends": "@kata-codes/eslint-config"
 	},
 	"dependencies": {
-		"discord.js": "github:discordjs/discord.js",
-		"yargs": "^15.3.1"
+		"axios": "^0.19.2",
+		"cheerio": "^1.0.0-rc.3",
+		"discord.js": "^12.2.0",
+		"pg": "^8.3.0",
+		"reflect-metadata": "^0.1.13",
+		"typeorm": "^0.2.25",
+		"yargs": "^15.4.1"
 	},
 	"devDependencies": {
-		"@the-expanse-discord/eslint-config-expanse": "github:The-Expanse-Discord/eslint-config-expanse#refine-ruleset",
-		"@types/node": "^13.11.1",
-		"@types/yargs": "^15.0.4",
-		"eslint": "^6.8.0",
-		"typescript": "^3.8.3"
+		"@kata-codes/eslint-config": "github:kata-codes/eslint-config",
+		"@types/cheerio": "^0.22.21",
+		"@types/node": "^14.0.26",
+		"@types/pg": "^7.14.4",
+		"@types/yargs": "^15.0.5",
+		"eslint": "^7.5.0",
+		"ts-node": "^8.10.2",
+		"typedoc": "^0.17.8",
+		"typescript": "^3.9.7"
 	}
 }
