@@ -7,13 +7,13 @@ async function infect(): Promise<void> {
 	const target: ConnectionOptions = await getConnectionOptions();
 	const source: DatabaseSource = {
 		entities: [
-			Path.join(__dirname, '..\\Entities', '*.{js,ts}')
+			Path.join(__dirname, '.\\Infrastructure\\Entities', '*.{js,ts}')
 		],
 		migrations: [
-			Path.join(__dirname, '..\\Database\\Migrations', '*.{js,ts}')
+			Path.join(__dirname, '.\\Infrastructure\\Database\\Migrations', '*.{js,ts}')
 		],
 		subscriber: [
-			Path.join(__dirname, '..\\Database\\Subscriber', '*.{js,ts}')
+			Path.join(__dirname, '.\\Infrastructure\\Database\\Subscriber', '*.{js,ts}')
 		]
 	};
 

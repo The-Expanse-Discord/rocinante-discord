@@ -38,13 +38,17 @@ export class Nerd {
 		return `${ constants.urlApodRandom }${ rYear.slice(-2) }${ rMonth }${ rDay }.html`;
 	}
 
-	public static async fetchApod(isRandom: boolean): Promise<MessageEmbed> {
+	public static async fetchApod(isRandom: boolean): Promise<MessageEmbed | string> {
 		const uri: string = isRandom ? this.getRandomApodUri() : constants.urlApod;
-		const html: AxiosResponse = await get(uri);
+		let html: AxiosResponse;
 
-		const apod: APoDContent = this.processApod(html, uri);
-
-		return this.createApodEmbed(apod);
+		try {
+			html = await get(uri);
+			const apod: APoDContent = this.processApod(html, uri);
+			return this.createApodEmbed(apod);
+		} catch {
+			return `There was an error retrieving the APoD.`;
+		}
 	}
 
 	private static processApod(html: AxiosResponse, uri: string): APoDContent {

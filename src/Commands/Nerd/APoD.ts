@@ -27,8 +27,9 @@ export class APoD extends Command {
 	public async execute(message: Message, args: string[]): Promise<void> {
 		const isRandom: boolean = args[0] === 'r';
 
-		const embed: MessageEmbed = await Nerd.fetchApod(isRandom);
-
-		message.channel.send(embed);
+		await Nerd.fetchApod(isRandom)
+			.then((response: MessageEmbed | string): void => {
+				message.channel.send(response);
+			});
 	}
 }

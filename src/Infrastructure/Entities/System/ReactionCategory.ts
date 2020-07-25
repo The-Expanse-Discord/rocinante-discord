@@ -1,5 +1,6 @@
 import { Entity, PrimaryColumn, Column, BaseEntity } from 'typeorm';
 import { ReactionCategoryData } from '../../Interfaces/System';
+import { RoleCategory } from '../../Enums/Role Assignment';
 
 /**
  * ## Reaction Category
@@ -19,5 +20,25 @@ export class ReactionCategory extends BaseEntity {
 		super();
 		if (info)
 			Object.assign(this, info);
+	}
+
+	public create(roleCategoryId: number): ReactionCategory {
+		let name: string;
+
+		switch (roleCategoryId) {
+			case RoleCategory.Book:
+				name = 'Book';
+				break;
+
+			case RoleCategory.Novella:
+				name = 'Novella';
+				break;
+
+			default:
+				name = 'Show';
+				break;
+		}
+
+		return new ReactionCategory({ id: roleCategoryId, name });
 	}
 }

@@ -37,10 +37,7 @@ export class APoD extends Command {
 
 		await Nerd.fetchComic(comicNumber, isRandom)
 			.then((response: MessageEmbed | string): void => {
-				if (typeof response === 'string')
-					message.channel.send(response);
-				else
-					message.channel.send(response);
+				message.channel.send(response);
 			})
 			.catch((): void => {
 				message.channel.send(`There was an error retrieving the XKCD Comic.`);
