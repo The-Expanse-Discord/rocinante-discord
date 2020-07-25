@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import { Command } from '../Infrastructure/System';
-import { Message, MessageEmbed, Role, GuildMember } from 'discord.js';
+import { Message, MessageEmbed, MessageReaction, PartialUser, User, GuildMember, Role } from 'discord.js';
 import { RoleCategory, Emoji } from '../Infrastructure/Enums/Role Assignment';
 import constants from './Constants';
 
@@ -42,30 +42,25 @@ export class System {
 
 	public static createReactionEmbed(category: number): MessageEmbed {
 		const embed: MessageEmbed = new MessageEmbed;
+		embed.setColor(constants.embedColorBase);
+
 		switch (category) {
 			case RoleCategory.Book:
-				embed.setColor(constants.embedColorBase);
 				embed.setTitle('The Expanse: Book Role Assignment');
 				embed.setThumbnail('https://i.imgur.com/iGZGW7u.png');
-				embed.setDescription('React below to opt-in to specific book channels.');
 				return embed;
 
 			case RoleCategory.Novella:
-				embed.setColor(constants.embedColorBase);
 				embed.setTitle('The Expanse: Novella Role Assignment');
 				embed.setThumbnail('https://i.imgur.com/vuiekLb.png');
-				embed.setDescription('React below to opt-in to specific novella channels.');
 				return embed;
 
 			case RoleCategory.Show:
-				embed.setColor(constants.embedColorBase);
 				embed.setTitle('The Expanse: Show Role Assignment');
 				embed.setThumbnail('https://i.imgur.com/kXIe12S.png');
-				embed.setDescription('React below to opt-in to specific show channels.');
 				return embed;
 
 			default:
-				embed.setColor(constants.embedColorBase);
 				embed.setTitle('The Expanse: Reaction-based Role Assignment');
 				embed.setDescription('This server has a spoiler system in place.  You only see channels for ' +
 					'which you have opted into, by assigning particular roles.\n\n' +
@@ -138,20 +133,33 @@ export class System {
 		});
 	}
 
-	public static processReaction(action: string, role: Role, member: GuildMember): void {
-		switch (action) {
-			case 'MESSAGE_REACTION_ADD':
-				if (member.roles.cache.has(role.id))
-					return;
-				member.roles.add(role);
-				break;
+	public static async processReaction(reaction: MessageReaction, user: User | PartialUser): Promise<void> {
+		let messageReaction: MessageReaction;
 
-			case 'MESSAGE_REACTION_REMOVE':
-				if (member.roles.cache.has(role.id))
-					member.roles.remove(role);
-				break;
-			default:
-				break;
+		try {
+			messageReaction = await reaction.fetch();
+
+			if (messageReaction.message.guild) {
+				const roleName: string[] | null = messageReaction.emoji.name.match(/[A-Z][a-z]+|[0-9]+/g);
+				let role: Role | undefined;
+				const member: GuildMember = await messageReaction.message.guild.members.fetch(user.id);
+
+				if (roleName)
+					role = messageReaction.message.guild.roles.cache
+						.find(r => r.name.replace('\'', '').includes(roleName.join(' ')));
+
+				if (role)
+					if (member.roles.cache.has(role.id)) {
+						member.roles.remove(role);
+						messageReaction.users.remove(user.id);
+					} else {
+						member.roles.add(role);
+						messageReaction.users.add(user.id);
+					}
+			}
+		} catch (error) {
+			console.log('Something went wrong when fetching the message: ', error);
+			return;
 		}
 	}
 }

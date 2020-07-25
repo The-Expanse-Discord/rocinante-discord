@@ -1,30 +1,32 @@
 import 'reflect-metadata';
 import * as fs from 'fs';
 import * as Path from 'path';
-import { createConnection, Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 import { ReactionCategory } from '../../../Entities';
 import { ReactionCategoryData } from '../../../Interfaces/System';
 
-/**
- * @ignore
- */
-const reactionCategoryString: string = fs.readFileSync(
-	Path.join(__dirname, '..\\..\\Data\\System\\Reactions\\reactionCategories.json') as string, 'utf8'
-);
+export async function insertReactionCategories(connection: Connection): Promise<void> {
+	const reactionCategoryString: string[] = fs.readFileSync(
+		Path.resolve(__dirname, '..\\..\\Data\\System\\Reactions\\reactionCategories.txt'), 'utf8'
+	).split('\n');
 
-/**
- * @ignore
- */
-const reactionCategoryData: ReactionCategoryData[] = JSON.parse(reactionCategoryString);
+	const reactionCategoryRepo: Repository<ReactionCategory> = connection.getRepository(ReactionCategory);
+	const reactionCategories: ReactionCategory[] = [];
 
-createConnection()
-	.then(connection => {
-		const reactionCategoryRepo: Repository<ReactionCategory> = connection.getRepository(ReactionCategory);
+	for (const line of reactionCategoryString) {
+		const data: string[] = line.split(',');
 
-		reactionCategoryData.forEach(async r => {
-			await reactionCategoryRepo.save(new ReactionCategory(r));
-		});
-	})
-	.catch(error => {
-		console.log(error);
-	});
+		const reactionCategoryData: ReactionCategoryData = {
+			id: Number(data[0]),
+			name: data[1]
+		};
+
+		reactionCategories.push(new ReactionCategory(reactionCategoryData));
+	}
+
+	for (const rc of reactionCategories)
+		// eslint-disable-next-line no-await-in-loop
+		await reactionCategoryRepo.save(rc);
+
+	console.log(`inserted ${ reactionCategories.length } Reaction Categories...`);
+}

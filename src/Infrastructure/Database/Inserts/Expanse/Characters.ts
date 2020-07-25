@@ -1,30 +1,33 @@
 import 'reflect-metadata';
 import * as fs from 'fs';
 import * as Path from 'path';
-import { createConnection, Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 import { Character } from '../../../Entities';
 import { CharacterData } from '../../../Interfaces/Expanse';
 
-/**
- * @ignore
- */
-const characterDataString: string = fs.readFileSync(
-	Path.join(__dirname, '..\\..\\Data\\Expanse\\characters.json') as string, 'utf8'
-);
+export async function insertCharacters(connection: Connection): Promise<void> {
+	const characterDataString: string[] = fs.readFileSync(
+		Path.resolve(__dirname, '..\\..\\Data\\Expanse\\characters.txt'), 'utf8'
+	).split('\n');
 
-/**
- * @ignore
- */
-const characterData: CharacterData[] = JSON.parse(characterDataString);
+	const characterRepo: Repository<Character> = connection.getRepository(Character);
+	const characters: Character[] = [];
 
-createConnection()
-	.then(connection => {
-		const characterRepo: Repository<Character> = connection.getRepository(Character);
+	for (const line of characterDataString) {
+		const data: string[] = line.split(',');
 
-		characterData.forEach(async c => {
-			await characterRepo.save(new Character(c));
-		});
-	})
-	.catch(error => {
-		console.log(error);
-	});
+		const characterData: CharacterData = {
+			id: Number(data[0]),
+			firstName: data[1],
+			lastName: data[2]
+		};
+
+		characters.push(new Character(characterData));
+	}
+
+	for (const c of characters)
+		// eslint-disable-next-line no-await-in-loop
+		await characterRepo.save(c);
+
+	console.log(`inserted ${ characters.length } characters...`);
+}

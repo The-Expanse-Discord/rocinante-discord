@@ -12,7 +12,8 @@
 	"scripts": {
 		"code:lint": "eslint ./src/**/*.ts",
 		"code:build": "tsc -p ./tsconfig.json",
-		"docs:build": "typedoc"
+		"docs:build": "typedoc",
+		"db:seed": "ts-node ./src/Infrastructure/Database/Inserts/index.ts"
 	},
 	"eslintConfig": {
 		"extends": "@kata-codes/eslint-config"

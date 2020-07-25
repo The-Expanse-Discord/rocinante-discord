@@ -1,31 +1,33 @@
 import 'reflect-metadata';
 import * as fs from 'fs';
 import * as Path from 'path';
-import { createConnection, Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 import { Book } from '../../../Entities';
 import { BookData } from '../../../Interfaces/Expanse';
 
-/**
- * @ignore
- */
-const bookDataString: string = fs.readFileSync(
-	Path.join(__dirname, '..\\..\\Data\\Expanse\\books.json') as string, 'utf8'
-);
+export async function insertBooks(connection: Connection): Promise<void> {
+	const bookDataString: string[] = fs.readFileSync(
+		Path.resolve(__dirname, '..\\..\\Data\\Expanse\\books.txt'), 'utf8'
+	).split('\n');
 
-/**
- * @ignore
- */
-const bookData: BookData[] = JSON.parse(bookDataString);
+	const bookRepo: Repository<Book> = connection.getRepository(Book);
+	const books: Book[] = [];
 
-createConnection()
-	.then(connection => {
-		const bookRepo: Repository<Book> = connection.getRepository(Book);
+	for (const line of bookDataString) {
+		const data: string[] = line.split(',');
 
-		bookData.forEach(async b => {
-			await bookRepo.save(new Book(b));
-			console.log(`saved ${ b.id }`);
-		});
-	})
-	.catch(error => {
-		console.log(error);
-	});
+		const bookData: BookData = {
+			id: Number(data[0]),
+			title: data[1],
+			isNovella: data[2] === 'true'
+		};
+
+		books.push(new Book(bookData));
+	}
+
+	for (const b of books)
+		// eslint-disable-next-line no-await-in-loop
+		await bookRepo.save(b);
+
+	console.log(`inserted ${ books.length } books...`);
+}

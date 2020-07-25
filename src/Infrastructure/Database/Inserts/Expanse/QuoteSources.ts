@@ -1,34 +1,13 @@
 import 'reflect-metadata';
-import { createConnection, Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 import { QuoteSource } from '../../../Entities';
-import { QuoteSourceData } from '../../../Interfaces/Expanse';
 
-/**
- * @ignore
- */
-const bookSourceData: QuoteSourceData = { id: 1, name: 'Book' };
+export async function insertQuoteSources(connection: Connection): Promise<void> {
+	const quoteSourceRepo: Repository<QuoteSource> = connection.getRepository(QuoteSource);
+	const bookSource: QuoteSource = new QuoteSource({ id: 1, name: 'Book' });
+	const showSource: QuoteSource = new QuoteSource({ id: 2, name: 'Show' });
 
-/**
- * @ignore
- */
-const showSourceData: QuoteSourceData = { id: 2, name: 'Show' };
-
-/**
- * @ignore
- */
-const bookSource: QuoteSource = new QuoteSource(bookSourceData);
-
-/**
- * @ignore
- */
-const showSource: QuoteSource = new QuoteSource(showSourceData);
-
-createConnection()
-	.then(async connection => {
-		const quoteSourceRepo: Repository<QuoteSource> = connection.getRepository(QuoteSource);
-		await quoteSourceRepo.save(bookSource);
-		await quoteSourceRepo.save(showSource);
-	})
-	.catch(error => {
-		console.log(error);
-	});
+	await quoteSourceRepo.save(bookSource);
+	await quoteSourceRepo.save(showSource);
+	console.log(`inserted 2 Quote Sources...`);
+}

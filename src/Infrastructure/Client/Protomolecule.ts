@@ -3,8 +3,7 @@ import { ActivityType, Client, ClientOptions, Collection } from 'discord.js';
 import { Command } from '../System/Command';
 import { CommandHandler, EventHandler } from '../Handlers';
 import { configDiscordClient } from './Config';
-import { getConnectionOptions, Connection, createConnection, ConnectionOptions } from 'typeorm';
-import { DatabaseSource } from '../Interfaces/System';
+import { Connection } from 'typeorm';
 
 /**
  * ## Protomolecule
@@ -15,17 +14,16 @@ import { DatabaseSource } from '../Interfaces/System';
 export default class Protomolecule extends Client {
 	public readonly prefix: string;
 
-	public id: string | undefined;
 	public statusType: ActivityType;
 	public statusText: string;
 
 	public eventHandler: EventHandler;
 	public commandHandler: CommandHandler;
 
-	public database: Promise<Connection>;
+	public database: Connection;
 	public commands: Collection<string, Command>;
 
-	public constructor(clientOptions?: ClientOptions) {
+	public constructor(dbConnection: Connection, clientOptions?: ClientOptions) {
 		super(clientOptions);
 
 		this.token = configDiscordClient.token;
@@ -38,7 +36,7 @@ export default class Protomolecule extends Client {
 		this.eventHandler = new EventHandler(this);
 		this.commandHandler = new CommandHandler(this);
 
-		this.database = this.connectDatabase();
+		this.database = dbConnection;
 		this.commands = new Collection;
 	}
 
@@ -55,7 +53,6 @@ export default class Protomolecule extends Client {
 
 		if (this.token) {
 			await this.login(this.token);
-			this.id = this.user ? this.user.id : undefined;
 
 			console.log('Logged in');
 		} else
@@ -66,22 +63,5 @@ export default class Protomolecule extends Client {
 		} catch (error) {
 			console.log('Unable to load commands');
 		}
-	}
-
-	private async connectDatabase(): Promise<Connection> {
-		const target: ConnectionOptions = await getConnectionOptions();
-		const source: DatabaseSource = {
-			entities: [
-				Path.join(__dirname, '..\\Entities', '*.{js,ts}')
-			],
-			migrations: [
-				Path.join(__dirname, '..\\Database\\Migrations', '*.{js,ts}')
-			],
-			subscriber: [
-				Path.join(__dirname, '..\\Database\\Subscriber', '*.{js,ts}')
-			]
-		};
-
-		return createConnection(Object.assign(target, source));
 	}
 }
