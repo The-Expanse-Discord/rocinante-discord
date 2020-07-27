@@ -5,7 +5,9 @@
 	"version": "1.0.0",
 	"license": "MIT",
 	"author": "kata-gatame <nathan@kata.codes>",
-	"contributors": [ "John Daniels (https://github.com/johndaniels)" ],
+	"contributors": [
+		"John Daniels (https://github.com/johndaniels)"
+	],
 	"repository": "https://github.com/The-Expanse-Discord/Protomolecule.git",
 	"homepage": "https://github.com/The-Expanse-Discord/Protomolecule#readme",
 	"bugs": "https://github.com/The-Expanse-Discord/Protomolecule/issues",
