@@ -52,7 +52,7 @@ export class Nerd {
 	}
 
 	private static processApod(html: AxiosResponse, uri: string): APoDContent {
-		const $: CheerioStatic = load(html.data);
+		const $: cheerio.Root = load(html.data);
 
 		const title: string = $('center + center > b:first-child')
 			.text()
