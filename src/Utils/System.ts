@@ -148,13 +148,11 @@ export class System {
 					role = messageReaction.message.guild.roles.cache
 						.find(r => r.name.replace('\'', '').includes(roleName.join(' ')));
 
-				if (role) {
-					if (member.roles.cache.has(role.id)) {
+				if (role)
+					if (member.roles.cache.has(role.id))
 						await member.roles.remove(role);
-					}
 					else
 						member.roles.add(role);
-				}
 			}
 		} catch (error) {
 			console.log('Something went wrong when fetching the message: ', error);
@@ -177,9 +175,8 @@ export class System {
 					role = messageReaction.message.guild.roles.cache
 						.find(r => r.name.replace('\'', '').includes(roleName.join(' ')));
 
-				if (role) {
+				if (role)
 					await member.roles.remove(role);
-				}
 			}
 		} catch (error) {
 			console.log('Something went wrong when fetching the message: ', error);

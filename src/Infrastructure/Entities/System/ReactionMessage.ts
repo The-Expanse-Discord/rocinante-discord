@@ -4,7 +4,7 @@ import {
 	Column,
 	BaseEntity,
 	getManager,
-	Repository,
+	Repository
 } from 'typeorm';
 import { ReactionMessageData } from '../../Interfaces/System';
 import { ReactionCategory } from './ReactionCategory';

@@ -33,15 +33,15 @@ export class EventHandler {
 			async(reaction: MessageReaction, user: User | PartialUser): Promise<void> => {
 				if (user.bot)
 					return;
-				
+
 				const repo: Repository<ReactionMessage> = getManager().getRepository(ReactionMessage);
 				const m: ReactionMessage[] = await repo.find({
-					where: [{
+					where: [ {
 						messageId: reaction.message.id
-					}]
+					} ]
 				});
 
-				if (m.length == 0)
+				if (m.length === 0)
 					return;
 
 				await System.processReaction(reaction, user);
@@ -51,15 +51,15 @@ export class EventHandler {
 			async(reaction: MessageReaction, user: User | PartialUser): Promise<void> => {
 				if (user.bot)
 					return;
-				
+
 				const repo: Repository<ReactionMessage> = getManager().getRepository(ReactionMessage);
 				const m: ReactionMessage[] = await repo.find({
-					where: [{
+					where: [ {
 						messageId: reaction.message.id
-					}]
+					} ]
 				});
 
-				if (m.length == 0)
+				if (m.length === 0)
 					return;
 
 				await System.removeRole(reaction, user);
