@@ -148,14 +148,38 @@ export class System {
 					role = messageReaction.message.guild.roles.cache
 						.find(r => r.name.replace('\'', '').includes(roleName.join(' ')));
 
-				if (role)
+				if (role) {
 					if (member.roles.cache.has(role.id)) {
-						member.roles.remove(role);
-						messageReaction.users.remove(user.id);
-					} else {
-						member.roles.add(role);
-						messageReaction.users.add(user.id);
+						await member.roles.remove(role);
 					}
+					else
+						member.roles.add(role);
+				}
+			}
+		} catch (error) {
+			console.log('Something went wrong when fetching the message: ', error);
+			return;
+		}
+	}
+
+	public static async removeRole(reaction: MessageReaction, user: User | PartialUser): Promise<void> {
+		let messageReaction: MessageReaction;
+
+		try {
+			messageReaction = await reaction.fetch();
+
+			if (messageReaction.message.guild) {
+				const roleName: string[] | null = messageReaction.emoji.name.match(/[A-Z][a-z]+|[0-9]+/g);
+				let role: Role | undefined;
+				const member: GuildMember = await messageReaction.message.guild.members.fetch(user.id);
+
+				if (roleName)
+					role = messageReaction.message.guild.roles.cache
+						.find(r => r.name.replace('\'', '').includes(roleName.join(' ')));
+
+				if (role) {
+					await member.roles.remove(role);
+				}
 			}
 		} catch (error) {
 			console.log('Something went wrong when fetching the message: ', error);

@@ -2,11 +2,9 @@ import {
 	Entity,
 	PrimaryGeneratedColumn,
 	Column,
-	JoinColumn,
-	OneToOne,
 	BaseEntity,
 	getManager,
-	Repository
+	Repository,
 } from 'typeorm';
 import { ReactionMessageData } from '../../Interfaces/System';
 import { ReactionCategory } from './ReactionCategory';
@@ -25,8 +23,6 @@ export class ReactionMessage extends BaseEntity {
 	@Column('varchar')
 	public messageId!: string;
 
-	@JoinColumn()
-	@OneToOne(() => ReactionCategory)
 	public category!: ReactionCategory;
 
 	public constructor(info?: ReactionMessageData) {

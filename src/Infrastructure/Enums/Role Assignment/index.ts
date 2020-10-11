@@ -1,2 +1,2 @@
-export * from './Emoji';
+export * from './Emoji.dev';
 export * from './RoleCategory';
