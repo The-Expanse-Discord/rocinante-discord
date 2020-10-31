@@ -59,7 +59,7 @@ export default class Protomolecule extends Client {
 			console.log('No token present');
 
 		try {
-			this.commandHandler.init(Path.join(__dirname, '..\\..\\Commands'));
+			this.commandHandler.init(Path.join(__dirname, '..', '..', 'Commands'));
 		} catch (error) {
 			console.log('Unable to load commands');
 		}
