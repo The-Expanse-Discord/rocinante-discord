@@ -7,7 +7,7 @@ import { CharacterData } from '../../../Interfaces/Expanse';
 
 export async function insertCharacters(connection: Connection): Promise<void> {
 	const characterDataString: string[] = fs.readFileSync(
-		Path.resolve(__dirname, '..\\..\\Data\\Expanse\\characters.txt'), 'utf8'
+		Path.resolve(__dirname, Path.join('..', '..', 'Data', 'Expanse', 'characters.txt')), 'utf8'
 	).split('\n');
 
 	const characterRepo: Repository<Character> = connection.getRepository(Character);
