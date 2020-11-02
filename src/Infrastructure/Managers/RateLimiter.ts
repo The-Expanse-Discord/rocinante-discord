@@ -1,4 +1,8 @@
 
+/**
+ * @category Managers
+ */
+
 function defaultTimer(): number {
 	return Date.now();
 }
@@ -70,9 +74,7 @@ export default class RateLimiter {
 		return this.tryRemoveTokens(userId, 1);
 	}
 
-	public constructor(interval: number,
-		tokensPerInterval: number,
-		maxTokens: number,
+	public constructor(interval: number, tokensPerInterval: number,	maxTokens: number,
 		timer: () => number = defaultTimer) {
 		this.interval = interval;
 		this.maxTokens = maxTokens;

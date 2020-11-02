@@ -8,4 +8,7 @@ export interface CommandInfo {
 	usage: string;
 	group: string[];
 	roles: string[];
+	rolesDebitTickets: number;
+	unlimitedRoles: string[];
+	unlimitedRolesDebitTickets: number;
 }
