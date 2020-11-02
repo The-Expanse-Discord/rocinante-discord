@@ -22,7 +22,10 @@ export class Create extends Command {
 			description: 'Create the embed message for a sepcific category.',
 			usage: '<prefix>c',
 			group: [ 'system' ],
-			roles: [ 'The Rocinante' ]
+			roles: [ 'The Rocinante' ],
+			rolesDebitTickets: 0,
+			unlimitedRoles: [],
+			unlimitedRolesDebitTickets: 0
 		});
 	}
 

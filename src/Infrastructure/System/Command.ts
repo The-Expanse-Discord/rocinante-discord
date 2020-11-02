@@ -20,6 +20,12 @@ export abstract class Command<T extends Protomolecule = Protomolecule> {
 
 	public roles!: string[];
 
+	public rolesDebitTickets!: number;
+
+	public unlimitedRoles!: string[];
+
+	public unlimitedRolesDebitTickets!: number;
+
 	public constructor(info?: CommandInfo) {
 		if (info)
 			Object.assign(this, info);

@@ -2,7 +2,7 @@
 	"name": "@the-expanse-discord/protomolecule",
 	"description": "General purpose bot for The Expanse Discord server.",
 	"main": "bin/index.js",
-	"version": "1.0.0",
+	"version": "3.0.0",
 	"license": "MIT",
 	"author": "kata-gatame <nathan@kata.codes>",
 	"contributors": [
@@ -33,12 +33,15 @@
 	"devDependencies": {
 		"@kata-codes/eslint-config": "github:kata-codes/eslint-config",
 		"@types/cheerio": "^0.22.22",
+		"@types/jest": "^24.0.23",
 		"@types/node": "^14.11.8",
 		"@types/pg": "^7.14.5",
 		"@types/yargs": "^15.0.8",
 		"eslint": "^7.11.0",
-		"ts-node": "^9.0.0",
+		"jest": "^26.0.0",
 		"typedoc": "^0.19.2",
-		"typescript": "^4.0.3"
+		"typescript": "^4.0.3",
+		"ts-jest": "^26.4.3",
+		"ts-node": "^9.0.0"
 	}
 }

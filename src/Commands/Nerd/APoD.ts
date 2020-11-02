@@ -20,7 +20,10 @@ export class APoD extends Command {
 			description: 'NASA\'s Astronomy Picture of the Day',
 			usage: '<prefix>apod <Argument>?',
 			group: [ 'nerd' ],
-			roles: []
+			roles: [],
+			rolesDebitTickets: 7500,
+			unlimitedRoles: [ 'The Rocinante', 'Moderation Team' ],
+			unlimitedRolesDebitTickets: 0
 		});
 	}
 
