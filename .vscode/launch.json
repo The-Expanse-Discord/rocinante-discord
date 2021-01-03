@@ -9,7 +9,7 @@
 		],
 		"program": "${workspaceFolder}/bin/index.js",
 		"args": [
-			"--config", "${workspaceFolder}/src/Infrastructure/Client/config.json"
+			"--config", "${workspaceFolder}/config.json5"
 		],
 		"outFiles": [
 			"${workspaceFolder}/bin/**/*.js"
