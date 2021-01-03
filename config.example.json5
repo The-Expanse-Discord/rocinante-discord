@@ -1,0 +1,11 @@
+{
+	"token": "<bot token>",
+	"owner": "<owner discord id>",
+	"commandPrefix": ".",
+	"statusType": "WATCHING",
+	"statusText": "you sleep...",
+	// A map from servers to reaction channels
+	"reactionChannels": {
+        "1234": "1234",
+    }
+}
