@@ -1,8 +1,5 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import { Command } from '../System/Command';
 import { Message, GuildMember } from 'discord.js';
-import { System } from '../../Utils';
 import Protomolecule from '../Client/Protomolecule';
 
 /**
@@ -15,9 +12,8 @@ export class CommandHandler {
 		this.client = proto;
 	}
 
-	public init(dir: string): void {
-		const commandPath: string = path.resolve(dir);
-		this.registerCommands(commandPath);
+	public init(commands: (new () => Command)[]): void {
+		this.registerCommands(commands);
 	}
 
 	public async processCommand(message: Message): Promise<void> {
@@ -33,33 +29,19 @@ export class CommandHandler {
 				await fetchedCommand.execute(message, args);
 	}
 
-	private registerCommands(dir: string): void {
-		fs.readdirSync(dir).forEach(file => {
-			const fullPath: string = path.join(dir, file);
-			if (fs.lstatSync(fullPath).isDirectory())
-				this.registerCommands(fullPath);
-			else {
-				if (!file.endsWith('.js'))
-					return;
+	private registerCommands(commandClasses: (new () => Command)[]): void {
+		for (const commandClass of commandClasses) {
+			const commandInstance: Command = new commandClass;
 
-				const command: Command = require(`${ fullPath }`);
-				const commandClasses: (new () => Command)[] = System.findCommandClasses(command);
+			for (const cmd in commandInstance.command)
+				if ({}.hasOwnProperty.call(commandInstance.command, cmd))
+					this.client.commands.set(
+						commandInstance.command[cmd].toLowerCase(),
+						commandInstance.init(this.client)
+					);
 
-				if (commandClasses.length !== 0)
-					for (const commandClass of commandClasses) {
-						const commandInstance: Command = new commandClass;
-
-						for (const cmd in commandInstance.command)
-							if ({}.hasOwnProperty.call(commandInstance.command, cmd))
-								this.client.commands.set(
-									commandInstance.command[cmd].toLowerCase(),
-									commandInstance.init(this.client)
-								);
-
-						console.log(`${ commandInstance.name } loaded`);
-					}
-			}
-		});
+			console.log(`${ commandInstance.name } loaded`);
+		}
 	}
 
 	private hasRoles(member: GuildMember, command: Command): boolean {

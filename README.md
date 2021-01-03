@@ -17,6 +17,5 @@ cp example.config.json config.json
 # Edit config.json with the appropriate values and then run:
 
 npm install
-npm run code:build
-node bin/index.js --config config.json
+npm run dev
 ```

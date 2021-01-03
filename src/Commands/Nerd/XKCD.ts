@@ -14,7 +14,7 @@ import { Nerd } from '../../Utils';
  *
  * @category Commands: Nerd
  */
-export class APoD extends Command {
+export class XKCD extends Command {
 	public constructor() {
 		super({
 			name: 'XKCD',

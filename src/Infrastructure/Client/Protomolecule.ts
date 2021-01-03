@@ -1,9 +1,10 @@
-import * as Path from 'path';
 import { ActivityType, Client, ClientOptions, Collection } from 'discord.js';
 import { Command } from '../System/Command';
 import { CommandHandler, EventHandler } from '../Handlers';
 import { configDiscordClient } from './Config';
-import { Connection } from 'typeorm';
+import { APoD } from '../../Commands/Nerd/APoD';
+import { XKCD } from '../../Commands/Nerd/XKCD';
+import { Create } from '../../Commands/Role Assignment/Create';
 
 /**
  * ## Protomolecule
@@ -20,10 +21,9 @@ export default class Protomolecule extends Client {
 	public eventHandler: EventHandler;
 	public commandHandler: CommandHandler;
 
-	public database: Connection;
 	public commands: Collection<string, Command>;
 
-	public constructor(dbConnection: Connection, clientOptions?: ClientOptions) {
+	public constructor(clientOptions?: ClientOptions) {
 		super(clientOptions);
 
 		this.token = configDiscordClient.token;
@@ -36,7 +36,6 @@ export default class Protomolecule extends Client {
 		this.eventHandler = new EventHandler(this);
 		this.commandHandler = new CommandHandler(this);
 
-		this.database = dbConnection;
 		this.commands = new Collection;
 	}
 
@@ -59,7 +58,7 @@ export default class Protomolecule extends Client {
 			console.log('No token present');
 
 		try {
-			this.commandHandler.init(Path.join(__dirname, '..\\..\\Commands'));
+			this.commandHandler.init([ APoD, XKCD, Create ]);
 		} catch (error) {
 			console.log('Unable to load commands');
 		}
