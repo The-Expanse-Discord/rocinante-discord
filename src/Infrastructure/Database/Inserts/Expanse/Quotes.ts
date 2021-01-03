@@ -7,7 +7,7 @@ import { QuoteData } from '../../../Interfaces/Expanse';
 
 export function insertQuotes(connection: Connection): void {
 	const quoteDataString: string = fs.readFileSync(
-		Path.join(__dirname, '..\\..\\Data\\Expanse\\Quotes\\avasarala.json') as string, 'utf8'
+		Path.join(__dirname, Path.join('..', '..', 'Data', 'Expanse', 'Quotes', 'avasarala.json')) as string, 'utf8'
 	);
 
 	const quoteData: QuoteData[] = JSON.parse(quoteDataString);

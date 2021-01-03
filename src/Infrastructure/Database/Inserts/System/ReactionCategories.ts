@@ -7,7 +7,7 @@ import { ReactionCategoryData } from '../../../Interfaces/System';
 
 export async function insertReactionCategories(connection: Connection): Promise<void> {
 	const reactionCategoryString: string[] = fs.readFileSync(
-		Path.resolve(__dirname, '..\\..\\Data\\System\\Reactions\\reactionCategories.txt'), 'utf8'
+		Path.resolve(__dirname, Path.join('..', '..', 'Data', 'System', 'Reactions', 'reactionCategories.txt')), 'utf8'
 	).split('\n');
 
 	const reactionCategoryRepo: Repository<ReactionCategory> = connection.getRepository(ReactionCategory);

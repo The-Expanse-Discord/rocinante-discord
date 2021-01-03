@@ -3,6 +3,8 @@ import { DiscordEvent } from '../Enums/System';
 import { Message, MessageReaction, PartialUser, User } from 'discord.js';
 import Protomolecule from '../Client/Protomolecule';
 import { System } from '../../Utils';
+import { getManager, Repository } from 'typeorm';
+import { ReactionMessage } from '../Entities';
 
 /**
  * @category Handler
@@ -32,6 +34,16 @@ export class EventHandler {
 				if (user.bot)
 					return;
 
+				const repo: Repository<ReactionMessage> = getManager().getRepository(ReactionMessage);
+				const m: ReactionMessage[] = await repo.find({
+					where: [ {
+						messageId: reaction.message.id
+					} ]
+				});
+
+				if (m.length === 0)
+					return;
+
 				await System.processReaction(reaction, user);
 			});
 
@@ -40,7 +52,17 @@ export class EventHandler {
 				if (user.bot)
 					return;
 
-				await System.processReaction(reaction, user);
+				const repo: Repository<ReactionMessage> = getManager().getRepository(ReactionMessage);
+				const m: ReactionMessage[] = await repo.find({
+					where: [ {
+						messageId: reaction.message.id
+					} ]
+				});
+
+				if (m.length === 0)
+					return;
+
+				await System.removeRole(reaction, user);
 			});
 
 		this.client.on(DiscordEvent.Disconnect, () => {

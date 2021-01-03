@@ -7,7 +7,7 @@ import { BookData } from '../../../Interfaces/Expanse';
 
 export async function insertBooks(connection: Connection): Promise<void> {
 	const bookDataString: string[] = fs.readFileSync(
-		Path.resolve(__dirname, '..\\..\\Data\\Expanse\\books.txt'), 'utf8'
+		Path.resolve(__dirname, Path.join('..', '..', 'Data', 'Expanse', 'books.txt')), 'utf8'
 	).split('\n');
 
 	const bookRepo: Repository<Book> = connection.getRepository(Book);

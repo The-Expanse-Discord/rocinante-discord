@@ -22,7 +22,10 @@ export class XKCD extends Command {
 			description: 'XKCD Comics',
 			usage: '<prefix>xkcd <Argument>?',
 			group: [ 'nerd' ],
-			roles: []
+			roles: [],
+			rolesDebitTickets: 7500,
+			unlimitedRoles: [ 'The Rocinante', 'Moderation Team' ],
+			unlimitedRolesDebitTickets: 0
 		});
 	}
 

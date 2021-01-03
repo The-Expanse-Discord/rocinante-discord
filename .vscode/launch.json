@@ -7,9 +7,9 @@
 		"skipFiles": [
 			"<node_internals>/**"
 		],
-		"program": "${workspaceFolder}\\bin\\index.js",
+		"program": "${workspaceFolder}/bin/index.js",
 		"args": [
-			"--config", "${workspaceFolder}\\src\\Infrastructure\\Client\\config.json"
+			"--config", "${workspaceFolder}/src/Infrastructure/Client/config.json"
 		],
 		"outFiles": [
 			"${workspaceFolder}/bin/**/*.js"
