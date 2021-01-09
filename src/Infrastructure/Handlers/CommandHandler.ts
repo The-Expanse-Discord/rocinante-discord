@@ -34,12 +34,17 @@ export class CommandHandler {
 		if (fetchedCommand && message.member)
 			if (fetchedCommand.roles.length === 0 || this.hasRoles(message.member, fetchedCommand)) {
 				let ticketDebitAmount: number = 0;
+				const uniqueId: string = message.member.toString().concat(fetchedCommand.name);
 				if (this.hasUnlimitedRoles(message.member, fetchedCommand))
 					ticketDebitAmount = fetchedCommand.unlimitedRolesDebitTickets;
 				else
 					ticketDebitAmount = fetchedCommand.rolesDebitTickets;
-				if (this.limiter.tryRemoveTokens(message.member.toString(), ticketDebitAmount))
+				if (this.limiter.tryRemoveTokens(uniqueId, ticketDebitAmount))
 					await fetchedCommand.execute(message, args);
+				else
+					await System.rateLimitWarnUser(fetchedCommand.command,
+						message.member.user,
+						this.limiter.numberOfIntervalsUntilAmountCanBeRemoved(uniqueId, ticketDebitAmount));
 			}
 	}
 

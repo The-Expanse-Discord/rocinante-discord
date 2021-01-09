@@ -183,4 +183,19 @@ export class System {
 			return;
 		}
 	}
+
+	public static async rateLimitWarnUser(commands: string[], user: User | PartialUser, wait: number): Promise<void> {
+		try {
+			console.log('trying to message user');
+			console.log('command used: ', commands);
+			const message: string = 'Command(s): \''.concat(commands.toString(),
+				'\' are being used too quickly.  Please wait ',
+				wait.toString(),
+				' second(s) before using this command again.');
+			await user.send(message);
+		} catch (error) {
+			console.log('Something went wrong when sending user a rate limit message: ', error);
+			return;
+		}
+	}
 }
