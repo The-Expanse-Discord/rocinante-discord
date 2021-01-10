@@ -39,6 +39,7 @@ export class CommandHandler {
 					ticketDebitAmount = fetchedCommand.unlimitedRolesDebitTickets;
 				else
 					ticketDebitAmount = fetchedCommand.rolesDebitTickets;
+
 				if (this.limiter.tryRemoveTokens(uniqueId, ticketDebitAmount))
 					await fetchedCommand.execute(message, args);
 				else
