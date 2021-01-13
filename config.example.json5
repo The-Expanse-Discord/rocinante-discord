@@ -5,7 +5,7 @@
 	"statusType": "WATCHING",
 	"statusText": "you sleep...",
 	// A map from servers to reaction channels
-	"reactionChannels": {
+	"welcomeChannels": {
         "1234": "1234",
     }
 }

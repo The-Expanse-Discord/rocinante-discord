@@ -27,16 +27,19 @@ export class CommandHandler {
 
 		const fetchedCommand: Command | undefined = this.client.commands.get(issuedCommand);
 
-		if (fetchedCommand && message.member)
+		if (fetchedCommand && message.member) {
 			if (fetchedCommand.roles.length === 0 || this.hasRoles(message.member, fetchedCommand)) {
 				let ticketDebitAmount: number = 0;
-				if (this.hasUnlimitedRoles(message.member, fetchedCommand))
+				if (this.hasUnlimitedRoles(message.member, fetchedCommand)) {
 					ticketDebitAmount = fetchedCommand.unlimitedRolesDebitTickets;
-				else
+				} else {
 					ticketDebitAmount = fetchedCommand.rolesDebitTickets;
-				if (this.limiter.tryRemoveTokens(message.member.toString(), ticketDebitAmount))
+				}
+				if (this.limiter.tryRemoveTokens(message.member.toString(), ticketDebitAmount)) {
 					await fetchedCommand.execute(message, args);
+				}
 			}
+		}
 	}
 
 	private registerCommands(commandClasses: (new () => Command)[]): void {
@@ -55,14 +58,16 @@ export class CommandHandler {
 	}
 
 	private hasRoles(member: GuildMember, command: Command): boolean {
-		if (member.roles.cache.filter(role => command.roles.includes(role.name)).size > 0)
+		if (member.roles.cache.filter(role => command.roles.includes(role.name)).size > 0) {
 			return true;
+		}
 		return false;
 	}
 
 	private hasUnlimitedRoles(member: GuildMember, command: Command): boolean {
-		if (member.roles.cache.filter(role => command.unlimitedRoles.includes(role.name)).size > 0)
+		if (member.roles.cache.filter(role => command.unlimitedRoles.includes(role.name)).size > 0) {
 			return true;
+		}
 		return false;
 	}
 }

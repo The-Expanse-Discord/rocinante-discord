@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as yargs from 'yargs';
-import JSON5 from 'json5';
+import * as JSON5 from 'json5';
 import Configuration from '../System/Configuration';
 
 /** @internal */

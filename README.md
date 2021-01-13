@@ -12,18 +12,11 @@ General purpose bot for The Expanse Discord server.
 ## Initial Setup
 Copy the example config files over to a usable config.
 ```sh
-cp ormconfig.example.json ormconfig.json
-cp .\src\Infrastructure\Client\config.example.json config.json
+cp .\config.example.json5 config.json5
 ```
 
-## Update Configs
+### Update Configs
 View the files and identify the values that you need to supply.
-
- - Edit `ormconfig.json` with the appropriate values:
-	- `host` - hostname of your postgres server.
-	- `username` - username for an account within your postgres server.
-	- `password` - password for user specified above.
-	- `database` - database to interact with.
 
 npm install
 npm run dev
@@ -33,6 +26,11 @@ npm run dev
 	- `commandPrefix` - Specify the command prefix.
 	- `statusType` - What status is the bot?
 	- `statusText` - Accompanying text for the bot status.
+	- `welcomeChannels` - A mapping of guild IDs to welcome channels. Protomolecule will use these to automatically create a welcome message and messages to react to.
+
+After running these, you will also need to set up any guilds in welcomeChannels with the appropriate emoji and roles.
+
+You can set up emoji with appropriate images and names matching those in the Emoji.ts file under `src/Infrastructure/Enums/Role Assignment`. You'll also have to set up roles with the same names (although spaces are allowed in the roles). 
 
 ## Lint
 ```sh
@@ -43,6 +41,12 @@ Correct any lint errors you might have.
 ## Build
 ```sh
 npm run code:build
+```
+
+## Run
+
+```sh
+npm run dev
 ```
 
 ## Debugging

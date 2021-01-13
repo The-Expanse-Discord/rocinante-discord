@@ -1,10 +1,9 @@
 import { ActivityType, Client, ClientOptions, Collection } from 'discord.js';
 import { Command } from '../System/Command';
-import { CommandHandler, EventHandler } from '../Handlers';
+import { CommandHandler, EventHandler, RoleHandler } from '../Handlers';
 import { configDiscordClient } from './Config';
 import { APoD } from '../../Commands/Nerd/APoD';
 import { XKCD } from '../../Commands/Nerd/XKCD';
-import { Create } from '../../Commands/Role Assignment/Create';
 
 /**
  * ## Protomolecule
@@ -14,12 +13,14 @@ import { Create } from '../../Commands/Role Assignment/Create';
  */
 export default class Protomolecule extends Client {
 	public readonly prefix: string;
+	private ready: boolean;
 
 	public statusType: ActivityType;
 	public statusText: string;
 
 	public eventHandler: EventHandler;
 	public commandHandler: CommandHandler;
+	public readonly roleManager: RoleHandler;
 
 	public commands: Collection<string, Command>;
 
@@ -35,8 +36,14 @@ export default class Protomolecule extends Client {
 
 		this.eventHandler = new EventHandler(this);
 		this.commandHandler = new CommandHandler(this);
+		this.roleManager = new RoleHandler(this, configDiscordClient.welcomeChannels);
 
 		this.commands = new Collection;
+		this.ready = false;
+	}
+
+	public isReady() : boolean {
+		return this.ready;
 	}
 
 	public async start(): Promise<void> {
@@ -44,6 +51,16 @@ export default class Protomolecule extends Client {
 	}
 
 	private async init(): Promise<void> {
+		this.on('ready', async() => {
+			/*
+			 * This needs to be initialized after we have loaded all the cached things,
+			 * which happens after ready, not login.
+			 */
+			await this.roleManager.init();
+			console.log('Protomolecule Ready');
+			this.ready = true;
+		});
+
 		try {
 			this.eventHandler.listen();
 		} catch (error) {
@@ -54,11 +71,12 @@ export default class Protomolecule extends Client {
 			await this.login(this.token);
 
 			console.log('Logged in');
-		} else
+		} else {
 			console.log('No token present');
+		}
 
 		try {
-			this.commandHandler.init([ APoD, XKCD, Create ]);
+			this.commandHandler.init([ APoD, XKCD ]);
 		} catch (error) {
 			console.log('Unable to load commands');
 		}
