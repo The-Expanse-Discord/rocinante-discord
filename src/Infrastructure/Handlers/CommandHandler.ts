@@ -1,4 +1,5 @@
 import { Command } from '../System/Command';
+import { System } from '../../Utils/System';
 import { Message, GuildMember } from 'discord.js';
 import Protomolecule from '../Client/Protomolecule';
 import RateLimiter from '../Managers/RateLimiter';
@@ -30,13 +31,19 @@ export class CommandHandler {
 		if (fetchedCommand && message.member) {
 			if (fetchedCommand.roles.length === 0 || this.hasRoles(message.member, fetchedCommand)) {
 				let ticketDebitAmount: number = 0;
+				const uniqueId: string = message.member.toString().concat(fetchedCommand.name);
 				if (this.hasUnlimitedRoles(message.member, fetchedCommand)) {
 					ticketDebitAmount = fetchedCommand.unlimitedRolesDebitTickets;
 				} else {
 					ticketDebitAmount = fetchedCommand.rolesDebitTickets;
 				}
-				if (this.limiter.tryRemoveTokens(message.member.toString(), ticketDebitAmount)) {
+
+				if (this.limiter.tryRemoveTokens(uniqueId, ticketDebitAmount)) {
 					await fetchedCommand.execute(message, args);
+				} else {
+					await System.rateLimitWarnUser(fetchedCommand.command,
+						message.member.user,
+						this.limiter.numberOfIntervalsUntilAmountCanBeRemoved(uniqueId, ticketDebitAmount));
 				}
 			}
 		}
@@ -46,12 +53,14 @@ export class CommandHandler {
 		for (const commandClass of commandClasses) {
 			const commandInstance: Command = new commandClass;
 
-			for (const cmd in commandInstance.command)
-				if ({}.hasOwnProperty.call(commandInstance.command, cmd))
+			for (const cmd in commandInstance.command) {
+				if ({}.hasOwnProperty.call(commandInstance.command, cmd)) {
 					this.client.commands.set(
 						commandInstance.command[cmd].toLowerCase(),
 						commandInstance.init(this.client)
 					);
+				}
+			}
 
 			console.log(`${ commandInstance.name } loaded`);
 		}

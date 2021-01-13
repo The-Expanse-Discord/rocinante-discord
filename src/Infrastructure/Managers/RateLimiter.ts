@@ -8,7 +8,8 @@ function defaultTimer(): number {
 }
 
 /**
- * Keeps track of a map of keys (presumably user IDs) to remaining tokens.
+ * Keeps track of a map of keys (make the key unique to whatever level you
+ * want, user, user+command, user+command+server, etc) for remaining tokens.
  * Tokens are earned back every interval milliseconds at a rate of
  * tokensPerInterval every interval.
  *
@@ -58,22 +59,63 @@ export default class RateLimiter {
 		this.lastDrip = newLastDrip;
 	}
 
-	public tryRemoveTokens(userId: string, amount: number): boolean {
-		this.dripIfNecessary();
-		if (!(userId in this.data))
-			this.data[userId] = this.maxTokens;
 
-		if (this.data[userId] < amount)
+	/**
+	 * tryRemoveTokens
+	 * Make sure to pass in unique strings for keys.  If you want per
+	 * command cooldowns, then make sure to include command name in the
+	 * unique id you pass.  If you want it to be per server as well,
+	 * also include that.
+	 * @param uniqueID unique name to store tickets under
+	 * @param amout amount of tickets to remove for the given uniqueId
+	 */
+	public tryRemoveTokens(uniqueId: string, amount: number): boolean {
+		this.dripIfNecessary();
+		if (!(uniqueId in this.data))
+			this.data[uniqueId] = this.maxTokens;
+
+		if (this.data[uniqueId] < amount)
 			return false;
 
-		this.data[userId] -= amount;
+		this.data[uniqueId] -= amount;
 		return true;
 	}
 
-	public tryRemoveToken(userId: string): boolean {
-		return this.tryRemoveTokens(userId, 1);
+	/**
+	 * tryRemoveTokens
+	 * Make sure to pass in unique strings for keys.  If you want per
+	 * command cooldowns, then make sure to include command name in the
+	 * unique id you pass.  If you want it to be per server as well,
+	 * also include that.
+	 * @param uniqueId unique name to store tickets under
+	 */
+	public tryRemoveToken(uniqueId: string): boolean {
+		return this.tryRemoveTokens(uniqueId, 1);
 	}
 
+	/**
+	 * numberOfIntervalsUntilAmountCanBeRemoved
+	 * Calculates the number of intervals until you can deduct the amount of
+	 * tickets you send in.  It does this by figuring out the difference
+	 * between the number of tokens it takes and the amount you want to remove
+	 * and then divides that by the tokensPerInterval.
+	 * @param uniqueId unique name to store tickets under
+	 * @param amount amount of tickets to remove for the given uniqueId
+	 */
+	public numberOfIntervalsUntilAmountCanBeRemoved(uniqueId: string, amount: number): number {
+		if (!(uniqueId in this.data) || this.data[uniqueId] > amount)
+			return 0;
+		const tokensRequired: number = amount - this.data[uniqueId];
+		return tokensRequired / this.tokensPerInterval;
+	}
+
+	/**
+	 * constructor
+	 * @param interval how often to generate new tickets
+	 * @param tokensPerInterval how  many tickets to generate each interval
+	 * @param maxTokens maximum number of tickets an id can hold
+	 * @param timer timer, not required, has a default timer
+	 */
 	public constructor(interval: number, tokensPerInterval: number,	maxTokens: number,
 		timer: () => number = defaultTimer) {
 		this.interval = interval;
