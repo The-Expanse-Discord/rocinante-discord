@@ -27,8 +27,9 @@ export class Nerd {
 		const mMax: number = new Date(1995, 5, 19, 23, 59, 59, 999).getTime();
 
 		let rDate: number = Math.round(min + Math.random() * (max - min));
-		while (rDate >= mMin && rDate <= mMax)
+		while (rDate >= mMin && rDate <= mMax) {
 			rDate = Math.round(min + Math.random() * (max - min));
+		}
 
 		const randomDate: Date = new Date(rDate);
 		const rDay: string = `0${ randomDate.getDate().toString() }`.slice(-2);
@@ -75,10 +76,12 @@ export class Nerd {
 		if (video) {
 			const regex: RegExp = new RegExp(/\/embed\/([a-zA-Z]\w+)/, 'g');
 			const identifier: RegExpExecArray | null = regex.exec(video);
-			if (identifier)
+			if (identifier) {
 				img = `https://i.ytimg.com/vi/${ identifier[1] }/maxresdefault.jpg`;
-		} else
+			}
+		} else {
 			img = `${ constants.urlApodImgBase }${ img }`;
+		}
 
 		return {
 			title,
@@ -94,10 +97,12 @@ export class Nerd {
 		embed.setAuthor(item.title);
 		embed.setDescription(item.desc);
 		embed.setFooter(`NASA Astronomy Picture of the Day`);
-		if (item.img)
+		if (item.img) {
 			embed.setImage(item.img);
-		if (item.video)
+		}
+		if (item.video) {
 			embed.addField('Video Content', item.video, true);
+		}
 
 		return embed;
 	}
@@ -113,11 +118,13 @@ export class Nerd {
 			uri = `${ constants.urlXkcd }/${ randomComicNumber }/info.0.json`;
 		}
 
-		if (n)
+		if (n) {
 			uri = `${ constants.urlXkcd }/${ n }/info.0.json`;
+		}
 
-		if (n && n > currentComicCount)
+		if (n && n > currentComicCount) {
 			return `\`${ n }\` exceeds the current maximum amount of comics, \`${ currentComicCount }\`.`;
+		}
 
 		const response: AxiosResponse = await get(uri);
 		const comic: Comic = response.data;

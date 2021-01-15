@@ -45,20 +45,22 @@ export default class RateLimiter {
 		const intervalsPassed: number = Math.floor(difference / this.interval);
 		const newLastDrip: number = this.lastDrip + this.interval * intervalsPassed;
 		const addedTokens: number = intervalsPassed * this.tokensPerInterval;
-		if (difference > this.interval)
-			for (const key in this.data)
+		if (difference > this.interval) {
+			for (const key in this.data) {
 				if (Object.prototype.hasOwnProperty.call(this.data, key)) {
 					const newTokens: number = this.data[key] + addedTokens;
-					if (newTokens > this.maxTokens)
+					if (newTokens > this.maxTokens) {
 					// We're back at max tokens now, we can remove the currently throttled user.
 						delete this.data[key];
-					else
+					} else {
 						this.data[key] = newTokens;
+					}
 				}
+			}
+		}
 
 		this.lastDrip = newLastDrip;
 	}
-
 
 	/**
 	 * tryRemoveTokens
@@ -71,11 +73,13 @@ export default class RateLimiter {
 	 */
 	public tryRemoveTokens(uniqueId: string, amount: number): boolean {
 		this.dripIfNecessary();
-		if (!(uniqueId in this.data))
+		if (!(uniqueId in this.data)) {
 			this.data[uniqueId] = this.maxTokens;
+		}
 
-		if (this.data[uniqueId] < amount)
+		if (this.data[uniqueId] < amount) {
 			return false;
+		}
 
 		this.data[uniqueId] -= amount;
 		return true;
@@ -103,8 +107,9 @@ export default class RateLimiter {
 	 * @param amount amount of tickets to remove for the given uniqueId
 	 */
 	public numberOfIntervalsUntilAmountCanBeRemoved(uniqueId: string, amount: number): number {
-		if (!(uniqueId in this.data) || this.data[uniqueId] > amount)
+		if (!(uniqueId in this.data) || this.data[uniqueId] > amount) {
 			return 0;
+		}
 		const tokensRequired: number = amount - this.data[uniqueId];
 		return tokensRequired / this.tokensPerInterval;
 	}
