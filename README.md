@@ -43,7 +43,7 @@ Correct any lint errors you might have.
 npm run code:build
 ```
 
-## Run
+## Run Development Build
 
 ```sh
 npm run dev
