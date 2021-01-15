@@ -174,6 +174,22 @@ export class RoleHandler {
 		}
 	}
 
+	private findRoleFromMessageReaction(reaction: MessageReaction) : Role | undefined {
+		if (!reaction.message.guild) {
+			return undefined;
+		}
+		const lowerRoleName: string = reaction.emoji.name.toLowerCase();
+		let role: Role | undefined;
+
+		if (lowerRoleName) {
+			role = reaction.message.guild.roles.cache
+				.find(r => r.name.replace(/'/g, '').replace(/ /g, '')
+					.toLowerCase()
+					.includes(lowerRoleName));
+		}
+		return role;
+	}
+
 	public async addRole(reaction: MessageReaction, user: User | PartialUser): Promise<void> {
 		if (!this.isRoleReactionMessage(reaction.message)) {
 			return;
@@ -184,15 +200,8 @@ export class RoleHandler {
 			messageReaction = await reaction.fetch();
 
 			if (messageReaction.message.guild) {
-				const roleName: string = messageReaction.emoji.name;
-				let role: Role | undefined;
+				const role : (Role | undefined) = this.findRoleFromMessageReaction(messageReaction);
 				const member: GuildMember = await messageReaction.message.guild.members.fetch(user.id);
-
-				if (roleName) {
-					role = messageReaction.message.guild.roles.cache
-						.find(r => r.name.replace(/'/g, '').replace(/ /g, '')
-							.includes(roleName));
-				}
 
 				if (role) {
 					console.log(`Adding role ${ role.name } to member ${ member.displayName }`);
@@ -215,15 +224,8 @@ export class RoleHandler {
 			messageReaction = await reaction.fetch();
 
 			if (messageReaction.message.guild) {
-				const roleName: string = messageReaction.emoji.name;
-				let role: Role | undefined;
+				const role : (Role | undefined) = this.findRoleFromMessageReaction(messageReaction);
 				const member: GuildMember = await messageReaction.message.guild.members.fetch(user.id);
-
-				if (roleName) {
-					role = messageReaction.message.guild.roles.cache
-						.find(r => r.name.replace(/'/g, '').replace(/ /g, '')
-							.includes(roleName));
-				}
 
 				if (role) {
 					console.log(`Removing role ${ role.name } from member ${ member.displayName }`);
