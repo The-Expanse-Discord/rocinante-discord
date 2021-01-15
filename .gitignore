@@ -6,4 +6,4 @@ bin/
 
 # Configuration Files
 ormconfig.json
-src/Infrastructure/Client/config.json
+config.json5

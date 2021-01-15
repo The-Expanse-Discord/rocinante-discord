@@ -2,8 +2,6 @@ import {
 	Entity,
 	PrimaryGeneratedColumn,
 	Column,
-	JoinColumn,
-	OneToOne,
 	BaseEntity,
 	getManager,
 	Repository
@@ -25,8 +23,6 @@ export class ReactionMessage extends BaseEntity {
 	@Column('varchar')
 	public messageId!: string;
 
-	@JoinColumn()
-	@OneToOne(() => ReactionCategory)
 	public category!: ReactionCategory;
 
 	public constructor(info?: ReactionMessageData) {
