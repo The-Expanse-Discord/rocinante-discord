@@ -124,7 +124,7 @@
 			}
 		],
 		"max-lines": [ "warn", 250 ],
-		"max-lines-per-function": [ "warn", 75 ],
+		"max-lines-per-function": [ "warn", 100 ],
 		"max-nested-callbacks": [ "warn", 4 ],
 		"max-params": [ "warn", 4 ],
 		"max-statements-per-line": "warn",
