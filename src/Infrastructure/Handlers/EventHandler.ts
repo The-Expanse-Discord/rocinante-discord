@@ -44,7 +44,7 @@ export class EventHandler {
 
 				const user : User = await this.client.users.fetch(packet.d.user_id);
 				const message : Message = await channel.messages.fetch(packet.d.message_id);
-				// Emojis can have identifiers of name:id format, so we have to account for that case as well
+				// Emojis may not have an id, so we should account for that.
 				const emoji : string = packet.d.emoji.id ?
 					packet.d.emoji.id :
 					packet.d.emoji.name;
