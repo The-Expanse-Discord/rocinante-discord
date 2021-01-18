@@ -42,31 +42,15 @@ export class EventHandler {
 				// Grab the channel to check the message from
 				const channel : TextChannel = this.client.channels.cache.get(packet.d.channel_id) as TextChannel;
 
-				// If we don't have the user, fetch it
-				if (!this.client.users.cache.has(packet.d.user_id)) {
-					await this.client.users.fetch(packet.d.user_id);
-				}
-				const user : User | undefined = this.client.users.cache.get(packet.d.user_id);
-				if (!user) {
-					console.log('No user fetched for reaction');
-					return;
-				}
-
-				// If we don't have the message, fetch it
-				if (!channel.messages.cache.has(packet.d.message_id)) {
-					await channel.messages.fetch(packet.d.message_id);
-				}
-				const message : Message | undefined = channel.messages.cache.get(packet.d.message_id);
-				if (!message) {
-					console.log('No message fetched for reaction');
-					return;
-				}
-				// Emojis can have identifiers of name:id format, so we have to account for that case as well
+				const user : User = await this.client.users.fetch(packet.d.user_id);
+				const message : Message = await channel.messages.fetch(packet.d.message_id);
+				// Emojis may not have an id, so we should account for that.
 				const emoji : string = packet.d.emoji.id ?
 					packet.d.emoji.id :
 					packet.d.emoji.name;
 				const reaction : MessageReaction | undefined = message.reactions.cache.get(emoji);
 				if (!reaction) {
+					console.log(`No reaction matching id ${ emoji } on message`);
 					return;
 				}
 				if (user.bot) {
