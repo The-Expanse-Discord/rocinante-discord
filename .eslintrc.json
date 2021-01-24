@@ -123,7 +123,7 @@
 				"ignoreRegExpLiterals": true
 			}
 		],
-		"max-lines": [ "warn", 250 ],
+		"max-lines": [ "warn", 500 ],
 		"max-lines-per-function": [ "warn", 100 ],
 		"max-nested-callbacks": [ "warn", 4 ],
 		"max-params": [ "warn", 4 ],
