@@ -2,7 +2,7 @@
 node_modules/
 
 # Production files
-bin/
+dist/
 
 # Configuration Files
 ormconfig.json
