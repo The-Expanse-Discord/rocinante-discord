@@ -12,6 +12,9 @@
 	"repository": "https://github.com/The-Expanse-Discord/Protomolecule.git",
 	"homepage": "https://github.com/The-Expanse-Discord/Protomolecule#readme",
 	"bugs": "https://github.com/The-Expanse-Discord/Protomolecule/issues",
+	"bin": {
+		"protomolecule": "./bin/protomolecule.js"
+	},
 	"scripts": {
 		"code:lint": "eslint ./src/**/*.ts",
 		"code:build": "tsc -p ./tsconfig.json",
@@ -42,5 +45,6 @@
 		"ts-node": "^9.0.0",
 		"typedoc": "^0.19.2",
 		"typescript": "^4.0.3"
-	}
+	},
+	"files": ["dist/**", "bin/*"]
 }
