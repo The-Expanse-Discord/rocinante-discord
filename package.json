@@ -1,5 +1,5 @@
 {
-	"name": "@the-expanse-discord/protomolecule",
+	"name": "@johndaniels/protomolecule",
 	"description": "General purpose bot for The Expanse Discord server.",
 	"main": "bin/index.js",
 	"version": "3.0.0",

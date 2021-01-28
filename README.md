@@ -8,8 +8,38 @@
 
 General purpose bot for The Expanse Discord server.
 
+## Running locally
 
-## Initial Setup
+Put the following in a file named config.json5:
+
+```json
+{
+	"token": "<bot token>",
+	"owner": "<owner discord id>",
+	"commandPrefix": ".",
+	"statusType": "WATCHING",
+	"statusText": "you sleep...",
+	// A map from servers to reaction channels
+	"welcomeChannels": {
+        "{SERVER_ID}": "{CHANNEL_ID}",
+    }
+}
+```
+
+Use npx to run the bot:
+`npx @johndaniels/protomolecule config.json`
+
+Or install the command and run it:
+```sh
+npm install -g @johndaniels/protomolecule
+
+protomolecule cconfig.json5
+```
+
+
+
+
+## Developer Setup
 Copy the example config files over to a usable config.
 ```sh
 cp .\config.example.json5 config.json5
@@ -32,22 +62,22 @@ After running these, you will also need to set up any guilds in welcomeChannels 
 
 You can set up emoji with appropriate images and names matching those in the Emoji.ts file under `src/Infrastructure/Enums/Role Assignment`. You'll also have to set up roles with the same names (although spaces are allowed in the roles). 
 
-## Lint
+### Lint
 ```sh
 npm run code:lint
 ```
 Correct any lint errors you might have.
 
-## Build
+### Build
 ```sh
 npm run code:build
 ```
 
-## Run Development Build
+### Run Development Build
 
 ```sh
 npm run dev
 ```
 
-## Debugging
+### Debugging
 Run the VSCode `launch` task to spin up a temporary instance for debugging.
