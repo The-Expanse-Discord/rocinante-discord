@@ -1,6 +1,5 @@
 import { Command } from '../System/Command';
-import { System } from '../../Utils/System';
-import { Message, GuildMember } from 'discord.js';
+import { Message, GuildMember, User, PartialUser } from 'discord.js';
 import Protomolecule from '../Client/Protomolecule';
 import RateLimiter from '../Managers/RateLimiter';
 
@@ -41,11 +40,26 @@ export class CommandHandler {
 				if (this.limiter.tryRemoveTokens(uniqueId, ticketDebitAmount)) {
 					await fetchedCommand.execute(message, args);
 				} else {
-					await System.rateLimitWarnUser(fetchedCommand.command,
+					await CommandHandler.rateLimitWarnUser(fetchedCommand.command,
 						message.member.user,
 						this.limiter.numberOfIntervalsUntilAmountCanBeRemoved(uniqueId, ticketDebitAmount));
 				}
 			}
+		}
+	}
+
+	private static async rateLimitWarnUser(commands: string[], user: User | PartialUser, wait: number): Promise<void> {
+		try {
+			console.log('trying to message user');
+			console.log('command used: ', commands);
+			const message: string = 'Command(s): \''.concat(commands.toString(),
+				'\' are being used too quickly.  Please wait ',
+				wait.toString(),
+				' second(s) before using this command again.');
+			await user.send(message);
+		} catch (error) {
+			console.log('Something went wrong when sending user a rate limit message: ', error);
+			return;
 		}
 	}
 

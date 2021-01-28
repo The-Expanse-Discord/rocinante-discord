@@ -14,18 +14,25 @@ import {
 import { Emoji } from '../Enums/Role Assignment';
 import Protomolecule from '../Client/Protomolecule';
 import constants from '../../Utils/Constants';
+import RateLimiter from '../Managers/RateLimiter';
+
+// This amounts to 1 second per role change
+const COST_PER_ROLE_CHANGE : number = 1;
 
 export class RoleHandler {
 	private readonly client: Protomolecule;
 	private readonly serverChannelMapping: Record<string, string>;
 	private readonly guildEmojiLookup: Record<string, Record<string, GuildEmoji> >;
 	private readonly guildMessageLookup: Record<string, Message[] >;
+	private readonly limiter: RateLimiter;
 
 	public constructor(protomolecule: Protomolecule, serverChannelMapping: Record<string, string>) {
 		this.client = protomolecule;
 		this.serverChannelMapping = serverChannelMapping;
 		this.guildEmojiLookup = {};
 		this.guildMessageLookup = {};
+		// Start with 30 tokens, use a token to add role, get a token per second
+		this.limiter = new RateLimiter(1000, 1, 30);
 	}
 
 	public async init(): Promise<void> {
@@ -190,32 +197,36 @@ export class RoleHandler {
 		return role;
 	}
 
-	public async addRole(reaction: MessageReaction, user: User | PartialUser): Promise<void> {
-		if (!this.isRoleReactionMessage(reaction.message)) {
-			return;
-		}
-		let messageReaction: MessageReaction;
-
+	private async rateLimitWarnUser(user: User | PartialUser): Promise<void> {
 		try {
-			messageReaction = await reaction.fetch();
-
-			if (messageReaction.message.guild) {
-				const role : (Role | undefined) = this.findRoleFromMessageReaction(messageReaction);
-				const member: GuildMember = await messageReaction.message.guild.members.fetch(user.id);
-
-				if (role) {
-					console.log(`Adding role ${ role.name } to member ${ member.displayName }`);
-					await member.roles.add(role);
-				}
-			}
+			console.log('trying to message user');
+			const wait: number = this.limiter.numberOfIntervalsUntilAmountCanBeRemoved(user.id, COST_PER_ROLE_CHANGE);
+			const message: string =
+				`Roles being changed too quickly, please wait ${ wait.toString() } seconds before setting more roles `;
+			await user.send(message);
 		} catch (error) {
-			console.log('Something went wrong when fetching the message: ', error);
+			console.log('Something went wrong when sending user a rate limit message: ', error);
 			return;
 		}
 	}
 
-	public async removeRole(reaction: MessageReaction, user: User | PartialUser): Promise<void> {
+	/**
+	 * This function checks if the user is rate limited for role changes, and
+	 * if so, goes ahead and messages them asynchronously (it does not wait)
+	 */
+	private checkRateLimitOrMessage(user: User | PartialUser) : boolean {
+		if (this.limiter.tryRemoveTokens(user.id, COST_PER_ROLE_CHANGE)) {
+			return true;
+		}
+		this.rateLimitWarnUser(user);
+		return false;
+	}
+
+	public async setRole(reaction: MessageReaction, user: User | PartialUser, shouldHaveRole: boolean): Promise<void> {
 		if (!this.isRoleReactionMessage(reaction.message)) {
+			return;
+		}
+		if (!this.checkRateLimitOrMessage(user)) {
 			return;
 		}
 		let messageReaction: MessageReaction;
@@ -228,8 +239,13 @@ export class RoleHandler {
 				const member: GuildMember = await messageReaction.message.guild.members.fetch(user.id);
 
 				if (role) {
-					console.log(`Removing role ${ role.name } from member ${ member.displayName }`);
-					await member.roles.remove(role);
+					if (shouldHaveRole) {
+						console.log(`Adding role ${ role.name } to member ${ member.displayName }`);
+						await member.roles.add(role);
+					} else {
+						console.log(`Removing role ${ role.name } from member ${ member.displayName }`);
+						await member.roles.remove(role);
+					}
 				}
 			}
 		} catch (error) {

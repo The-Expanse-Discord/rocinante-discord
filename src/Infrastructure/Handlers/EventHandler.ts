@@ -58,10 +58,10 @@ export class EventHandler {
 				}
 
 				if (packet.t === 'MESSAGE_REACTION_ADD') {
-					await this.client.roleManager.addRole(reaction, user);
+					await this.client.roleManager.setRole(reaction, user, true);
 				}
 				if (packet.t === 'MESSAGE_REACTION_REMOVE') {
-					await this.client.roleManager.removeRole(reaction, user);
+					await this.client.roleManager.setRole(reaction, user, false);
 				}
 				return;
 			}
