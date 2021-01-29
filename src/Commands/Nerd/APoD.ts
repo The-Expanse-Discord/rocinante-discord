@@ -21,7 +21,7 @@ export default class APoD extends Command {
 			usage: '<prefix>apod <Argument>?',
 			group: [ 'nerd' ],
 			roles: [],
-			commandsPerSecond: 0.005,
+			commandsPerMinute: 0.5,
 			commandSurgeMax: 1.5
 		});
 	}

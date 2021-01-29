@@ -19,6 +19,7 @@ Put the following in a file named config.json5:
 	"commandPrefix": ".",
 	"statusType": "WATCHING",
 	"statusText": "you sleep...",
+	"unlimitedRoles": [ "The Rocinante", "Moderation Team" ],
 	// A map from servers to reaction channels
 	"welcomeChannels": {
         "{SERVER_ID}": "{CHANNEL_ID}",
@@ -56,6 +57,7 @@ npm run dev
 	- `commandPrefix` - Specify the command prefix.
 	- `statusType` - What status is the bot?
 	- `statusText` - Accompanying text for the bot status.
+	- `unlimitedRoles` - Names of roles that aren't affected by rate limiting.
 	- `welcomeChannels` - A mapping of guild IDs to welcome channels. Protomolecule will use these to automatically create a welcome message and messages to react to.
 
 After running these, you will also need to set up any guilds in welcomeChannels with the appropriate emoji and roles.

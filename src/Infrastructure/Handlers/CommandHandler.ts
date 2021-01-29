@@ -9,10 +9,12 @@ import RateLimiter from '../Managers/RateLimiter';
 export class CommandHandler {
 	private readonly client: Protomolecule;
 	private readonly limiters: Record<string, RateLimiter>;
+	private readonly unlimitedRoles: string[];
 
-	public constructor(proto: Protomolecule) {
+	public constructor(proto: Protomolecule, unlimitedRoles: string[]) {
 		this.limiters = {};
 		this.client = proto;
+		this.unlimitedRoles = unlimitedRoles;
 	}
 
 	public init(commands: (new () => Command)[]): void {
@@ -69,7 +71,7 @@ export class CommandHandler {
 			const commandInstance: Command = new commandClass;
 
 			this.limiters[commandInstance.name] = new RateLimiter(1000,
-				commandInstance.commandsPerSecond,
+				commandInstance.commandsPerMinute / 60,
 				commandInstance.commandSurgeMax);
 			for (const cmd in commandInstance.command) {
 				if ({}.hasOwnProperty.call(commandInstance.command, cmd)) {
@@ -92,7 +94,7 @@ export class CommandHandler {
 	}
 
 	private hasUnlimitedRoles(member: GuildMember): boolean {
-		if (member.roles.cache.some(role => [ 'The Rocinante', 'Moderation Team' ].includes(role.name))) {
+		if (member.roles.cache.some(role => this.unlimitedRoles.includes(role.name))) {
 			return true;
 		}
 		return false;

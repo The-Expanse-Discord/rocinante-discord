@@ -36,7 +36,7 @@ export default class Protomolecule extends Client {
 		this.statusText = configDiscordClient.statusText;
 
 		this.eventHandler = new EventHandler(this);
-		this.commandHandler = new CommandHandler(this);
+		this.commandHandler = new CommandHandler(this, configDiscordClient.unlimitedRoles);
 		this.roleManager = new RoleHandler(this, configDiscordClient.welcomeChannels);
 
 		this.commands = new Collection;
