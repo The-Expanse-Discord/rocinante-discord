@@ -8,10 +8,10 @@ import RateLimiter from '../Managers/RateLimiter';
  */
 export class CommandHandler {
 	private readonly client: Protomolecule;
-	private readonly limiter: RateLimiter;
+	private readonly limiters: Record<string, RateLimiter>;
 
 	public constructor(proto: Protomolecule) {
-		this.limiter = new RateLimiter(1000, 10, 10000);
+		this.limiters = {};
 		this.client = proto;
 	}
 
@@ -30,19 +30,20 @@ export class CommandHandler {
 		if (fetchedCommand && message.member) {
 			if (fetchedCommand.roles.length === 0 || this.hasRoles(message.member, fetchedCommand)) {
 				let ticketDebitAmount: number = 0;
-				const uniqueId: string = message.member.toString().concat(fetchedCommand.name);
-				if (this.hasUnlimitedRoles(message.member, fetchedCommand)) {
-					ticketDebitAmount = fetchedCommand.unlimitedRolesDebitTickets;
+				const uniqueId: string = message.member.toString();
+				if (this.hasUnlimitedRoles(message.member)) {
+					ticketDebitAmount = 0;
 				} else {
-					ticketDebitAmount = fetchedCommand.rolesDebitTickets;
+					ticketDebitAmount = 1;
 				}
+				const limiter : RateLimiter = this.limiters[fetchedCommand.name];
 
-				if (this.limiter.tryRemoveTokens(uniqueId, ticketDebitAmount)) {
+				if (limiter.tryRemoveTokens(uniqueId, ticketDebitAmount)) {
 					await fetchedCommand.execute(message, args);
 				} else {
 					await CommandHandler.rateLimitWarnUser(fetchedCommand.command,
 						message.member.user,
-						this.limiter.numberOfIntervalsUntilAmountCanBeRemoved(uniqueId, ticketDebitAmount));
+						limiter.numberOfIntervalsUntilAmountCanBeRemoved(uniqueId, ticketDebitAmount));
 				}
 			}
 		}
@@ -54,7 +55,7 @@ export class CommandHandler {
 			console.log('command used: ', commands);
 			const message: string = 'Command(s): \''.concat(commands.toString(),
 				'\' are being used too quickly.  Please wait ',
-				wait.toString(),
+				Math.round(wait).toString(),
 				' second(s) before using this command again.');
 			await user.send(message);
 		} catch (error) {
@@ -67,6 +68,9 @@ export class CommandHandler {
 		for (const commandClass of commandClasses) {
 			const commandInstance: Command = new commandClass;
 
+			this.limiters[commandInstance.name] = new RateLimiter(1000,
+				commandInstance.commandsPerSecond,
+				commandInstance.commandSurgeMax);
 			for (const cmd in commandInstance.command) {
 				if ({}.hasOwnProperty.call(commandInstance.command, cmd)) {
 					this.client.commands.set(
@@ -87,8 +91,8 @@ export class CommandHandler {
 		return false;
 	}
 
-	private hasUnlimitedRoles(member: GuildMember, command: Command): boolean {
-		if (member.roles.cache.filter(role => command.unlimitedRoles.includes(role.name)).size > 0) {
+	private hasUnlimitedRoles(member: GuildMember): boolean {
+		if (member.roles.cache.some(role => [ 'The Rocinante', 'Moderation Team' ].includes(role.name))) {
 			return true;
 		}
 		return false;

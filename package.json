@@ -20,7 +20,7 @@
 		"code:build": "tsc -p ./tsconfig.json",
 		"docs:build": "typedoc",
 		"db:seed": "ts-node ./src/Infrastructure/Database/Inserts/index.ts",
-		"dev": "ts-node ./src/index.ts --config config.json5",
+		"dev": "ts-node ./src/cmd.ts --config config.json5",
 		"prepare": "npm run code:build"
 	},
 	"dependencies": {
