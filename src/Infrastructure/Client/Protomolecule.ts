@@ -2,8 +2,9 @@ import { ActivityType, Client, ClientOptions, Collection } from 'discord.js';
 import { Command } from '../System/Command';
 import { CommandHandler, EventHandler, RoleHandler } from '../Handlers';
 import { configDiscordClient } from './Config';
-import { APoD } from '../../Commands/Nerd/APoD';
-import { XKCD } from '../../Commands/Nerd/XKCD';
+import APoD from '../../Commands/Nerd/APoD';
+import XKCD from '../../Commands/Nerd/XKCD';
+import Avasarala from '../../Commands/Nerd/Avasarala';
 
 /**
  * ## Protomolecule
@@ -76,7 +77,7 @@ export default class Protomolecule extends Client {
 		}
 
 		try {
-			this.commandHandler.init([ APoD, XKCD ]);
+			this.commandHandler.init([ APoD, XKCD, Avasarala ]);
 		} catch (error) {
 			console.log('Unable to load commands');
 		}

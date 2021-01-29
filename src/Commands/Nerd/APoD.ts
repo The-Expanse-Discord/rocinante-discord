@@ -12,7 +12,7 @@ import { Nerd } from '../../Utils';
  *
  * @category Commands: Nerd
  */
-export class APoD extends Command {
+export default class APoD extends Command {
 	public constructor() {
 		super({
 			name: 'APoD',
@@ -21,9 +21,8 @@ export class APoD extends Command {
 			usage: '<prefix>apod <Argument>?',
 			group: [ 'nerd' ],
 			roles: [],
-			rolesDebitTickets: 7500,
-			unlimitedRoles: [ 'The Rocinante', 'Moderation Team' ],
-			unlimitedRolesDebitTickets: 0
+			commandsPerSecond: 0.005,
+			commandSurgeMax: 1.5
 		});
 	}
 

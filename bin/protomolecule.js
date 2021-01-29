@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../dist/index').infect();
+require('../dist/cmd');

@@ -20,15 +20,14 @@ export abstract class Command<T extends Protomolecule = Protomolecule> {
 
 	public roles!: string[];
 
-	public rolesDebitTickets!: number;
+	public commandsPerSecond!: number;
 
-	public unlimitedRoles!: string[];
-
-	public unlimitedRolesDebitTickets!: number;
+	public commandSurgeMax!: number;
 
 	public constructor(info?: CommandInfo) {
-		if (info)
+		if (info) {
 			Object.assign(this, info);
+		}
 	}
 
 	public init(client: T): Command {
