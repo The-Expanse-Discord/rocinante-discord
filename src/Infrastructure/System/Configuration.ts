@@ -8,6 +8,7 @@ export default class Configuration {
 	public readonly statusType: string;
 	public readonly statusText: string;
 	public readonly welcomeChannels: Record<string, string>;
+	public readonly unlimitedRoles: string[];
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public constructor(
@@ -17,14 +18,16 @@ export default class Configuration {
 			owner,
 			commandPrefix,
 			statusType,
-			statusText
+			statusText,
+			unlimitedRoles
 		}:
 		{
 			welcomeChannels: Record<string, string>,
 			token: string, owner: string,
 			commandPrefix: string,
 			statusType: string,
-			statusText: string
+			statusText: string,
+			unlimitedRoles: string[]
 		}
 	) {
 		this.token = Configuration.ensureNonNull(token, 'token');
@@ -33,6 +36,7 @@ export default class Configuration {
 		this.statusType = Configuration.ensureNonNull(statusType, 'statusType');
 		this.statusText = Configuration.ensureNonNull(statusText, 'statusText');
 		this.welcomeChannels = welcomeChannels;
+		this.unlimitedRoles = unlimitedRoles;
 	}
 
 	private static ensureNonNull(value: string, key: string) : string {

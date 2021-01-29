@@ -81,7 +81,7 @@ export default class Avasarala extends Command {
 			usage: '<prefix>ca',
 			group: [ 'nerd' ],
 			roles: [],
-			commandsPerSecond: 0.1,
+			commandsPerMinute: 5,
 			commandSurgeMax: 2.0
 		});
 	}

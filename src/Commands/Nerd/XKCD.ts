@@ -23,7 +23,7 @@ export default class XKCD extends Command {
 			usage: '<prefix>xkcd <Argument>?',
 			group: [ 'nerd' ],
 			roles: [],
-			commandsPerSecond: 0.005,
+			commandsPerMinute: 0.5,
 			commandSurgeMax: 1.5
 		});
 	}

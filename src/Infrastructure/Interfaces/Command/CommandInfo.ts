@@ -8,6 +8,6 @@ export interface CommandInfo {
 	usage: string;
 	group: string[];
 	roles: string[];
-	commandsPerSecond: number;
+	commandsPerMinute: number;
 	commandSurgeMax: number;
 }

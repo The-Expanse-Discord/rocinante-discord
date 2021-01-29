@@ -20,7 +20,7 @@ export abstract class Command<T extends Protomolecule = Protomolecule> {
 
 	public roles!: string[];
 
-	public commandsPerSecond!: number;
+	public commandsPerMinute!: number;
 
 	public commandSurgeMax!: number;
 
