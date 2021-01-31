@@ -10,11 +10,15 @@ export class CommandHandler {
 	private readonly client: Protomolecule;
 	private readonly limiters: Record<string, RateLimiter>;
 	private readonly unlimitedRoles: string[];
+	private readonly commandChannels: string[];
+	private readonly allCommandChannels: boolean;
 
-	public constructor(proto: Protomolecule, unlimitedRoles: string[]) {
+	public constructor(proto: Protomolecule, unlimitedRoles: string[], commandChannels: string[]) {
 		this.limiters = {};
 		this.client = proto;
 		this.unlimitedRoles = unlimitedRoles;
+		this.commandChannels = commandChannels;
+		this.allCommandChannels = commandChannels.includes('all');
 	}
 
 	public init(commands: (new () => Command)[]): void {
@@ -22,6 +26,9 @@ export class CommandHandler {
 	}
 
 	public async processCommand(message: Message): Promise<void> {
+		if (!this.allCommandChannels && !this.commandChannels.includes(message.channel.id)) {
+			return;
+		}
 		const args: string[] = message.content.slice(this.client.prefix.length).split(/ +/);
 
 		let issuedCommand: string | undefined = args.shift();

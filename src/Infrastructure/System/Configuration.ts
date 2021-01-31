@@ -9,6 +9,7 @@ export default class Configuration {
 	public readonly statusText: string;
 	public readonly welcomeChannels: Record<string, string>;
 	public readonly unlimitedRoles: string[];
+	public readonly commandChannels: string[];
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public constructor(
@@ -19,7 +20,8 @@ export default class Configuration {
 			commandPrefix,
 			statusType,
 			statusText,
-			unlimitedRoles
+			unlimitedRoles,
+			commandChannels
 		}:
 		{
 			welcomeChannels: Record<string, string>,
@@ -27,7 +29,8 @@ export default class Configuration {
 			commandPrefix: string,
 			statusType: string,
 			statusText: string,
-			unlimitedRoles: string[]
+			unlimitedRoles: string[],
+			commandChannels: string[]
 		}
 	) {
 		this.token = Configuration.ensureNonNull(token, 'token');
@@ -35,11 +38,12 @@ export default class Configuration {
 		this.commandPrefix = Configuration.ensureNonNull(commandPrefix, 'commandPrefix');
 		this.statusType = Configuration.ensureNonNull(statusType, 'statusType');
 		this.statusText = Configuration.ensureNonNull(statusText, 'statusText');
-		this.welcomeChannels = welcomeChannels;
-		this.unlimitedRoles = unlimitedRoles;
+		this.welcomeChannels = Configuration.ensureNonNull(welcomeChannels, 'welcomeChannels');
+		this.unlimitedRoles = Configuration.ensureNonNull(unlimitedRoles, 'unlimitedRoles');
+		this.commandChannels = Configuration.ensureNonNull(commandChannels, 'commandChannels');
 	}
 
-	private static ensureNonNull(value: string, key: string) : string {
+	private static ensureNonNull<T>(value: T, key: string) : T {
 		if (!value) {
 			throw new Error(`Empty value for ${ key } in configuration`);
 		}

@@ -4,7 +4,9 @@
 	"commandPrefix": ".",
 	"statusType": "WATCHING",
 	"statusText": "you sleep...",
-	"unlimitedRoles": [ 'The Rocinante', 'Moderation Team' ],
+	"unlimitedRoles": [ "The Rocinante", "Moderation Team" ],
+	// Lists which channels to respond to commands in. Use "all" in the list to respond in all visible channels.
+	"commandChannels": ["all"],
 	// A map from servers to reaction channels
 	"welcomeChannels": {
         "1234": "1234",
