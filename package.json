@@ -16,7 +16,7 @@
 		"protomolecule": "bin/protomolecule.js"
 	},
 	"scripts": {
-		"code:lint": "eslint ./src/**/*.ts",
+		"code:lint": "eslint './src/**/*.ts'",
 		"code:build": "tsc -p ./tsconfig.json",
 		"docs:build": "typedoc",
 		"db:seed": "ts-node ./src/Infrastructure/Database/Inserts/index.ts",

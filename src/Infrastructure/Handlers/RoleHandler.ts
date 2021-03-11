@@ -119,7 +119,8 @@ export class RoleHandler {
 			Emoji.NemesisGames,
 			Emoji.BabylonsAshes,
 			Emoji.PersepolisRising,
-			Emoji.TiamatsWrath
+			Emoji.TiamatsWrath,
+			Emoji.CurrentBook
 		]);
 		return message;
 	}
@@ -144,7 +145,8 @@ export class RoleHandler {
 			Emoji.Season1,
 			Emoji.Season2,
 			Emoji.Season3,
-			Emoji.Season4
+			Emoji.Season4,
+			Emoji.CurrentShow
 		]);
 		return message;
 	}
@@ -189,6 +191,7 @@ export class RoleHandler {
 		let role: Role | undefined;
 
 		if (lowerRoleName) {
+			console.log(lowerRoleName);
 			role = reaction.message.guild.roles.cache
 				.find(r => r.name.replace(/'/g, '').replace(/ /g, '')
 					.toLowerCase()
