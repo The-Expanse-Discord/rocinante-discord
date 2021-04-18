@@ -26,4 +26,5 @@ export enum Emoji {
 	Season4 = 'Season4',
 	CurrentBook = 'CurrentBook',
 	CurrentShow = 'CurrentShow',
+	CurrentAll = 'CurrentAll',
 }

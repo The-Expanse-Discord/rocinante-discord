@@ -55,6 +55,7 @@ export class RoleHandler {
 					this.ensureBookEmbed(channel, messages),
 					this.ensureNovellaEmbed(channel, messages),
 					this.ensureShowEmbed(channel, messages),
+					this.ensureCurrentEmbed(channel, messages),
 					this.ensureIntroEmbed(channel, messages)
 				]);
 			})
@@ -93,7 +94,7 @@ export class RoleHandler {
 	private ensureEmbed(
 		channel: TextChannel,
 		messages: Collection<string, Message>,
-		title: string, thumbnail: string
+		title: string, thumbnail: string | null = null
 	) : Promise<Message> {
 		const embedMessages: Message[] = messages.array().filter(
 			(message: Message) => message.embeds.some(embed => embed.title === title)
@@ -102,7 +103,9 @@ export class RoleHandler {
 			const embed: MessageEmbed = new MessageEmbed;
 			embed.setColor(constants.embedColorBase);
 			embed.setTitle(title);
-			embed.setThumbnail(thumbnail);
+			if (thumbnail !== null) {
+				embed.setThumbnail(thumbnail);
+			}
 
 			return channel.send(embed);
 		}
@@ -119,8 +122,7 @@ export class RoleHandler {
 			Emoji.NemesisGames,
 			Emoji.BabylonsAshes,
 			Emoji.PersepolisRising,
-			Emoji.TiamatsWrath,
-			Emoji.CurrentBook
+			Emoji.TiamatsWrath
 		]);
 		return message;
 	}
@@ -145,8 +147,17 @@ export class RoleHandler {
 			Emoji.Season1,
 			Emoji.Season2,
 			Emoji.Season3,
-			Emoji.Season4,
-			Emoji.CurrentShow
+			Emoji.Season4
+		]);
+		return message;
+	}
+
+	private async ensureCurrentEmbed(channel: TextChannel, messages: Collection<string, Message>): Promise<Message> {
+		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse: All Current Assignment');
+		await this.reactWith(message, [
+			Emoji.CurrentShow,
+			Emoji.CurrentBook,
+			Emoji.CurrentAll
 		]);
 		return message;
 	}
