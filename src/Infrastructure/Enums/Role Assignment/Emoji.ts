@@ -7,6 +7,7 @@
 export enum Emoji {
 	LeviathanWakes = 'LeviathanWakes',
 	TheButcherOfAndersonStation = 'TheButcherOfAndersonStation',
+	TheLastFlightOfTheCassandra = 'TheLastFlightOfTheCassandra',
 	CalibansWar = 'CalibansWar',
 	GodsOfRisk ='GodsOfRisk',
 	Drive = 'Drive',

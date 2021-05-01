@@ -220,6 +220,7 @@ export class RoleHandler {
 			Emoji.TheChurn,
 			Emoji.TheVitalAbyss,
 			Emoji.StrangeDogs,
+			Emoji.TheLastFlightOfTheCassandra,
 			Emoji.Auberon
 		]);
 		return message;
