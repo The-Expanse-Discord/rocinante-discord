@@ -54,11 +54,12 @@ export class RoleHandler {
 				console.log(channel.id);
 				console.log(channel.guild.id);
 				this.guildMessageLookup[channel.guild.id] = await Promise.all([
-					this.ensureBookEmbed(channel, messages),
-					this.ensureNovellaEmbed(channel, messages),
-					this.ensureShowEmbed(channel, messages),
+					this.ensureIntroEmbed(channel, messages),
+					this.ensureLearnerEmbed(channel, messages),
 					this.ensureCurrentEmbed(channel, messages),
-					this.ensureIntroEmbed(channel, messages)
+					this.ensureShowEmbed(channel, messages),
+					this.ensureBookEmbed(channel, messages),
+					this.ensureNovellaEmbed(channel, messages)
 				]);
 			})
 		);
@@ -133,7 +134,9 @@ export class RoleHandler {
 	private ensureEmbed(
 		channel: TextChannel,
 		messages: Collection<string, Message>,
-		title: string, thumbnail: string | null = null
+		title: string,
+		description: string,
+		thumbnail: string | null = null
 	) : Promise<Message> {
 		const embedMessages: Message[] = messages.array().filter(
 			(message: Message) => message.embeds.some(embed => embed.title === title)
@@ -141,6 +144,7 @@ export class RoleHandler {
 		if (embedMessages.length === 0) {
 			const embed: MessageEmbed = new MessageEmbed;
 			embed.setColor(constants.embedColorBase);
+			embed.setDescription(description);
 			embed.setTitle(title);
 			if (thumbnail !== null) {
 				embed.setThumbnail(thumbnail);
@@ -151,8 +155,31 @@ export class RoleHandler {
 		return Promise.resolve(embedMessages[0]);
 	}
 
+	private async ensureLearnerEmbed(channel: TextChannel, messages: Collection<string, Message>) : Promise<Message> {
+		const langBeltaLearnerEmoji: GuildEmoji | undefined =
+			this.client.emojis.cache.find(emoji => emoji.name === Emoji.LangBeltaLearner);
+		const description: string = `Click the ${ langBeltaLearnerEmoji } reaction to this message if you’re ` +
+			'curious about Lang Belta, the language spoken by the Belters on the show. You’ll gain access to the ' +
+			'Lang Belta Learning Community area of this server, where you can see our learning resources, discuss ' +
+			'the language, and participate in our fun text and voice practice chats. It’s a friendly group, and ' +
+			'new learners are always welcome! This area allows spoilers, but they are quite rare.';
+		const message: Message = await this.ensureEmbed(
+			channel,
+			messages,
+			'Lang Belta Learning Community',
+			description
+		);
+		await this.reactWith(message, [
+			Emoji.LangBeltaLearner
+		]);
+		return message;
+	}
+
 	private async ensureBookEmbed(channel: TextChannel, messages: Collection<string, Message>) : Promise<Message> {
-		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse: Book Role Assignment', 'https://i.imgur.com/iGZGW7u.png');
+		const description: string = 'Currently reading the novels? Select the books you’ve completed, and you’ll be ' +
+			'able to see the channels corresponding to each of them. As you progress through the series, you can ' +
+			'come back and select more roles. ';
+		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse Books', description, 'https://cdn.discordapp.com/attachments/795087530211016734/837893459322994729/Books_Grid_Small.png');
 		await this.reactWith(message, [
 			Emoji.LeviathanWakes,
 			Emoji.CalibansWar,
@@ -167,7 +194,16 @@ export class RoleHandler {
 	}
 
 	private async ensureNovellaEmbed(channel: TextChannel, messages: Collection<string, Message>) : Promise<Message> {
-		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse: Novella Role Assignment', 'https://i.imgur.com/vuiekLb.png');
+		const description: string = 'Reading the novellas and short stories the accompany the book series? Select ' +
+			'the ones you’ve read, and you’ll be able to see the channels corresponding to each of them. As you ' +
+			'read, you can come back and select more roles.';
+		const message: Message = await this.ensureEmbed(
+			channel,
+			messages,
+			'The Expanse Novellas & Short Stories',
+			description,
+			'https://cdn.discordapp.com/attachments/795087530211016734/837897157180653578/Novellas_Grid_Small.png'
+		);
 		await this.reactWith(message, [
 			Emoji.TheButcherOfAndersonStation,
 			Emoji.GodsOfRisk,
@@ -181,7 +217,10 @@ export class RoleHandler {
 	}
 
 	private async ensureShowEmbed(channel: TextChannel, messages: Collection<string, Message>) : Promise<Message> {
-		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse: Show Role Assignment', 'https://i.imgur.com/kXIe12S.png');
+		const description: string = 'Still watching the show for the first time? Select the seasons you’ve seen, ' +
+			'and you’ll be able to see the channels corresponding to each of them. As you progress through the show, ' +
+			'you can come back and select more roles.';
+		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse Show', description, 'https://cdn.discordapp.com/attachments/795087530211016734/837896913322901554/Seasons_Grid_Small.png');
 		await this.reactWith(message, [
 			Emoji.Season1,
 			Emoji.Season2,
@@ -192,7 +231,20 @@ export class RoleHandler {
 	}
 
 	private async ensureCurrentEmbed(channel: TextChannel, messages: Collection<string, Message>): Promise<Message> {
-		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse: All Current Assignment');
+		const currentBookEmoji: GuildEmoji | undefined =
+			this.client.emojis.cache.find(emoji => emoji.name === Emoji.CurrentBook);
+		const currentShowEmoji: GuildEmoji | undefined =
+			this.client.emojis.cache.find(emoji => emoji.name === Emoji.CurrentShow);
+		const currentAllEmoji: GuildEmoji | undefined =
+			this.client.emojis.cache.find(emoji => emoji.name === Emoji.CurrentAll);
+		const description: string = 'If you’re all caught up on the show, books, or both, the reactions here ' +
+			'will quickly ' +
+			`allow you to see all the Expanse discussion channels. Select ${ currentBookEmoji } if you’ve ` +
+			`read all the books and novellas released so far, ${ currentShowEmoji } if you’ve seen all ` +
+			`the aired episodes of the show, and ${ currentAllEmoji } if you’ve seen and read everything. ` +
+			'If you select these, there’s no need to select individual season or book roles further down.';
+		const message: Message =
+			await this.ensureEmbed(channel, messages, 'All Expanse Discussion', description);
 		await this.reactWith(message, [
 			Emoji.CurrentShow,
 			Emoji.CurrentBook,
@@ -202,14 +254,17 @@ export class RoleHandler {
 	}
 
 	private ensureIntroEmbed(channel: TextChannel, messages: Collection<string, Message>): Promise<Message> {
-		const title: string = 'The Expanse: Reaction-based Role Assignment';
+		const title: string = 'Reaction-Based Channel Access';
 		const embedMessages: Message[] = messages.array().filter(
 			(message: Message) => message.embeds.some(embed => embed.title === title)
 		);
-		const description: string = 'This server has a spoiler system in place.  You only see channels for ' +
-			'which you have opted into, by assigning particular roles.\n\n' +
-			'Opt-in to channels by reacting to the different category messages below.\n\n' +
-			'In order to remove an unwanted role, just remove your reaction by clicking the emoji once again.';
+
+		const description: string = 'Welcome! This server is a place for all fans of The Expanse to chat. ' +
+			'Whether you’ve seen the whole show and read all the books or you’re just starting out, ' +
+			'we have discussion channels for you! As a new community member, you can currently see the ' +
+			'channels that don’t allow spoilers. Use the reaction emoji on this page to assign yourself ' +
+			'roles corresponding to the books and seasons you’d like to talk about, ' +
+			'and their channels will become visible to you.';
 		if (embedMessages.length === 0) {
 			const embed: MessageEmbed = new MessageEmbed;
 			embed.setColor(constants.embedColorBase);

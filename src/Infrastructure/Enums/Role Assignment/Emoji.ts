@@ -24,6 +24,7 @@ export enum Emoji {
 	Season2 = 'Season2',
 	Season3 = 'Season3',
 	Season4 = 'Season4',
+	LangBeltaLearner = 'LangBeltaLearner',
 	CurrentBook = 'CurrentBook',
 	CurrentShow = 'CurrentShow',
 	CurrentAll = 'CurrentAll',
