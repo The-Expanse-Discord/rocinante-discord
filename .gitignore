@@ -7,3 +7,6 @@ dist/
 # Configuration Files
 ormconfig.json
 config.json5
+
+# default local data file
+database.json

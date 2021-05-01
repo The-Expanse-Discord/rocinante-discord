@@ -10,5 +10,11 @@
 	// A map from servers to reaction channels
 	"welcomeChannels": {
         "1234": "1234",
-    }
+    },
+	// Where to store values for how many chats people have made
+	"establishedMemberJsonFile": "database.json",
+	// What role should be assigned to indicate an established member
+	"establishedMemberRole": "Established Member",
+	// Categories where chats do not contribute to being an established member
+	"establishedMemberExcludedCategories": ["1234"]
 }
