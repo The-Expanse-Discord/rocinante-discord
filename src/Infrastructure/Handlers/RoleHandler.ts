@@ -25,12 +25,18 @@ export class RoleHandler {
 	private readonly guildEmojiLookup: Record<string, Record<string, GuildEmoji> >;
 	private readonly guildMessageLookup: Record<string, Message[] >;
 	private readonly limiter: RateLimiter;
+	private readonly moderatorUserId: string;
 
-	public constructor(protomolecule: Protomolecule, serverChannelMapping: Record<string, string>) {
+	public constructor(
+		protomolecule: Protomolecule,
+		serverChannelMapping: Record<string, string>,
+		moderatorUserId: string
+	) {
 		this.client = protomolecule;
 		this.serverChannelMapping = serverChannelMapping;
 		this.guildEmojiLookup = {};
 		this.guildMessageLookup = {};
+		this.moderatorUserId = moderatorUserId;
 		// Start with 30 tokens, use a token to add role, get a token per second
 		this.limiter = new RateLimiter(1000, 1, 30);
 	}
@@ -53,14 +59,15 @@ export class RoleHandler {
 			channelsList.map(async([ channel, messages ]) => {
 				console.log(channel.id);
 				console.log(channel.guild.id);
+				await this.ensureIntro(channel, messages);
 				this.guildMessageLookup[channel.guild.id] = await Promise.all([
-					this.ensureIntroEmbed(channel, messages),
 					this.ensureLearnerEmbed(channel, messages),
 					this.ensureCurrentEmbed(channel, messages),
 					this.ensureShowEmbed(channel, messages),
 					this.ensureBookEmbed(channel, messages),
 					this.ensureNovellaEmbed(channel, messages)
 				]);
+				await this.ensureFinalMessage(channel, messages);
 			})
 		);
 	}
@@ -161,13 +168,15 @@ export class RoleHandler {
 		const description: string = `Click the ${ langBeltaLearnerEmoji } reaction to this message if you’re ` +
 			'curious about Lang Belta, the language spoken by the Belters on the show. You’ll gain access to the ' +
 			'Lang Belta Learning Community area of this server, where you can see our learning resources, discuss ' +
-			'the language, and participate in our fun text and voice practice chats. It’s a friendly group, and ' +
-			'new learners are always welcome! This area allows spoilers, but they are quite rare.';
+			'this fun and interesting fictional language, and participate in our easygoing text and voice practice ' +
+			'chats. It’s a friendly group, and new learners are always welcome! This area allows spoilers, but they ' +
+			'are quite rare.';
 		const message: Message = await this.ensureEmbed(
 			channel,
 			messages,
 			'Lang Belta Learning Community',
-			description
+			description,
+			'https://i.imgur.com/OqPycws.png'
 		);
 		await this.reactWith(message, [
 			Emoji.LangBeltaLearner
@@ -179,7 +188,7 @@ export class RoleHandler {
 		const description: string = 'Currently reading the novels? Select the books you’ve completed, and you’ll be ' +
 			'able to see the channels corresponding to each of them. As you progress through the series, you can ' +
 			'come back and select more roles. ';
-		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse Books', description, 'https://cdn.discordapp.com/attachments/795087530211016734/837893459322994729/Books_Grid_Small.png');
+		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse Books', description, 'https://i.imgur.com/BHfnxXr.png');
 		await this.reactWith(message, [
 			Emoji.LeviathanWakes,
 			Emoji.CalibansWar,
@@ -202,7 +211,7 @@ export class RoleHandler {
 			messages,
 			'The Expanse Novellas & Short Stories',
 			description,
-			'https://cdn.discordapp.com/attachments/795087530211016734/837897157180653578/Novellas_Grid_Small.png'
+			'https://i.imgur.com/VhSPt4w.png'
 		);
 		await this.reactWith(message, [
 			Emoji.TheButcherOfAndersonStation,
@@ -220,7 +229,7 @@ export class RoleHandler {
 		const description: string = 'Still watching the show for the first time? Select the seasons you’ve seen, ' +
 			'and you’ll be able to see the channels corresponding to each of them. As you progress through the show, ' +
 			'you can come back and select more roles.';
-		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse Show', description, 'https://cdn.discordapp.com/attachments/795087530211016734/837896913322901554/Seasons_Grid_Small.png');
+		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse Show', description, 'https://i.imgur.com/57CXARX.png');
 		await this.reactWith(message, [
 			Emoji.Season1,
 			Emoji.Season2,
@@ -244,7 +253,7 @@ export class RoleHandler {
 			`the aired episodes of the show, and ${ currentAllEmoji } if you’ve seen and read everything. ` +
 			'If you select these, there’s no need to select individual season or book roles further down.';
 		const message: Message =
-			await this.ensureEmbed(channel, messages, 'All Expanse Discussion', description);
+			await this.ensureEmbed(channel, messages, 'All Expanse Discussion', description, 'https://i.imgur.com/eQPqYYI.png');
 		await this.reactWith(message, [
 			Emoji.CurrentShow,
 			Emoji.CurrentBook,
@@ -253,27 +262,45 @@ export class RoleHandler {
 		return message;
 	}
 
-	private ensureIntroEmbed(channel: TextChannel, messages: Collection<string, Message>): Promise<Message> {
-		const title: string = 'Reaction-Based Channel Access';
-		const embedMessages: Message[] = messages.array().filter(
-			(message: Message) => message.embeds.some(embed => embed.title === title)
+	private async ensureIntro(channel: TextChannel, messages: Collection<string, Message>): Promise<void> {
+		const moderatorUser: User | undefined = await this.client.users.fetch(this.moderatorUserId);
+
+		const text: string = 'Welcome! This server is a place for all fans of The Expanse to chat. ' +
+			'Whether you’ve seen the entire show and read all the books or you’re just starting out, ' +
+			'we have discussion channels for you. Our server is structured to keep people from accidentally ' +
+			'seeing spoilers they’d rather avoid, with channels for each book and season, plus channels for ' +
+			'discussing The Expanse as a whole. \n\n' +
+			'As a new member, you can currently see the channels that don’t ' +
+			'allow spoilers, like our general hangout channels. Access to additional channels is ' +
+			'determined by what roles you have as a community member. You can assign the roles you’d ' +
+			'like to have on this page by clicking the reaction emoji below each of the following messages.' +
+			'\n\nIf you have questions about using this page, feel free to ' +
+			`DM ${ moderatorUser } to get in touch with the moderation team.`;
+
+		const introMessages: Message[] = messages.array().filter(
+			(message: Message) => message.content.startsWith('Welcome! This')
 		);
 
-		const description: string = 'Welcome! This server is a place for all fans of The Expanse to chat. ' +
-			'Whether you’ve seen the whole show and read all the books or you’re just starting out, ' +
-			'we have discussion channels for you! As a new community member, you can currently see the ' +
-			'channels that don’t allow spoilers. Use the reaction emoji on this page to assign yourself ' +
-			'roles corresponding to the books and seasons you’d like to talk about, ' +
-			'and their channels will become visible to you.';
-		if (embedMessages.length === 0) {
-			const embed: MessageEmbed = new MessageEmbed;
-			embed.setColor(constants.embedColorBase);
-			embed.setTitle(title);
-			embed.setDescription(description);
-
-			return channel.send(embed);
+		if (introMessages.length === 0) {
+			await channel.send(text);
 		}
-		return Promise.resolve(embedMessages[0]);
+	}
+
+	private async ensureFinalMessage(channel: TextChannel, messages: Collection<string, Message>): Promise<void> {
+		const moderatorUser: User | undefined = await this.client.users.fetch(this.moderatorUserId);
+		const text: string = 'Now you’re all set up! Remember to keep spoilers out of our General Chat ' +
+			'channels, they’re meant for everyone. Come back to the Airlock section any time to add more ' +
+			'roles, review our rules, or see our widebeam announcements. Send a direct message to the ' +
+			`${ moderatorUser } bot to get in touch with our team if you ever have a question or need some help. ` +
+			'We’re looking forward to seeing you around the server!';
+
+		const introMessages: Message[] = messages.array().filter(
+			(message: Message) => message.content.startsWith('Now you’re')
+		);
+
+		if (introMessages.length === 0) {
+			await channel.send(text);
+		}
 	}
 
 	public async reactWith(message: Message, emoji: Emoji[]): Promise<void> {
