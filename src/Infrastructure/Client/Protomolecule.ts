@@ -1,6 +1,6 @@
 import { ActivityType, Client, ClientOptions, Collection } from 'discord.js';
 import { Command } from '../System/Command';
-import { CommandHandler, EventHandler, RoleHandler } from '../Handlers';
+import { CommandHandler, RoleHandler } from '../Handlers';
 import { configDiscordClient } from './Config';
 import APoD from '../../Commands/Nerd/APoD';
 import XKCD from '../../Commands/Nerd/XKCD';
@@ -19,7 +19,6 @@ export default class Protomolecule extends Client {
 	public statusType: ActivityType;
 	public statusText: string;
 
-	public eventHandler: EventHandler;
 	public commandHandler: CommandHandler;
 	public readonly roleManager: RoleHandler;
 
@@ -35,7 +34,6 @@ export default class Protomolecule extends Client {
 		this.statusType = configDiscordClient.statusType as ActivityType;
 		this.statusText = configDiscordClient.statusText;
 
-		this.eventHandler = new EventHandler(this);
 		this.commandHandler = new CommandHandler(this,
 			configDiscordClient.unlimitedRoles,
 			configDiscordClient.commandChannels);
@@ -54,21 +52,25 @@ export default class Protomolecule extends Client {
 	}
 
 	private async init(): Promise<void> {
-		this.on('ready', async() => {
+		this.once('ready', async() => {
 			/*
 			 * This needs to be initialized after we have loaded all the cached things,
 			 * which happens after ready, not login.
 			 */
+			if (this.user) {
+				await this.user.setActivity(this.statusText, { type: this.statusType });
+			}
+
 			await this.roleManager.init();
+			this.commandHandler.init([ APoD, XKCD, Avasarala ]);
+
 			console.log('Protomolecule Ready');
 			this.ready = true;
 		});
 
-		try {
-			this.eventHandler.listen();
-		} catch (error) {
-			return;
-		}
+		this.on('disconnect', () => {
+			process.exit(100);
+		});
 
 		if (this.token) {
 			await this.login(this.token);
@@ -77,7 +79,5 @@ export default class Protomolecule extends Client {
 		} else {
 			console.log('No token present');
 		}
-
-		this.commandHandler.init([ APoD, XKCD, Avasarala ]);
 	}
 }

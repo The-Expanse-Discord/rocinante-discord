@@ -36,6 +36,8 @@ export class RoleHandler {
 	}
 
 	public async init(): Promise<void> {
+		this.listen();
+
 		const channelsList: [TextChannel, Collection<string, Message>][] = await Promise.all(
 			this.client.guilds.cache.array().filter(guild => this.serverChannelMapping[guild.id])
 				.map(async guild => {
@@ -60,6 +62,43 @@ export class RoleHandler {
 				]);
 			})
 		);
+	}
+
+	private listen(): void {
+		this.client.on('raw', async packet => {
+			// We implement this as a raw handler because the add/remove reactions are brittle and can't handle not having users/messages cached.
+			if (!this.client.isReady()) {
+				return;
+			}
+			console.log(`received message of type ${ packet.t }`);
+			if ([ 'MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE' ].includes(packet.t)) {
+				// Grab the channel to check the message from
+				const channel : TextChannel = this.client.channels.cache.get(packet.d.channel_id) as TextChannel;
+
+				const user : User = await this.client.users.fetch(packet.d.user_id);
+				const message : Message = await channel.messages.fetch(packet.d.message_id);
+				// Emojis may not have an id, so we should account for that.
+				const emoji : string = packet.d.emoji.id ?
+					packet.d.emoji.id :
+					packet.d.emoji.name;
+				const reaction : MessageReaction | undefined = message.reactions.cache.get(emoji);
+				if (!reaction) {
+					console.log(`No reaction matching id ${ emoji } on message`);
+					return;
+				}
+				if (user.bot) {
+					return;
+				}
+
+				if (packet.t === 'MESSAGE_REACTION_ADD') {
+					await this.client.roleManager.setRole(reaction, user, true);
+				}
+				if (packet.t === 'MESSAGE_REACTION_REMOVE') {
+					await this.client.roleManager.setRole(reaction, user, false);
+				}
+				return;
+			}
+		});
 	}
 
 	private isRoleReactionMessage(message: Message) : boolean {

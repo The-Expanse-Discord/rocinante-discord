@@ -23,6 +23,17 @@ export class CommandHandler {
 
 	public init(commands: (new () => Command)[]): void {
 		this.registerCommands(commands);
+		this.listen();
+	}
+
+	public listen(): void {
+		this.client.on('message', async(message: Message) => {
+			if (!message.content.startsWith(this.client.prefix) || message.author.bot) {
+				return;
+			}
+
+			await this.processCommand(message);
+		});
 	}
 
 	public async processCommand(message: Message): Promise<void> {
