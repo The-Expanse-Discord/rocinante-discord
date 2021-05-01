@@ -11,6 +11,10 @@ export default class Configuration {
 	public readonly unlimitedRoles: string[];
 	public readonly commandChannels: string[];
 	public readonly moderatorUserId: string;
+	public readonly guild: string;
+	public readonly establishedMemberJsonFile: string;
+	public readonly establishedMemberRole: string;
+	public readonly establishedMemberExcludedCategories: string[];
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public constructor(
@@ -24,6 +28,10 @@ export default class Configuration {
 			unlimitedRoles,
 			commandChannels,
 			moderatorUserId,
+			guild,
+			establishedMemberJsonFile,
+			establishedMemberRole,
+			establishedMemberExcludedCategories
 		}:
 		{
 			welcomeChannels: Record<string, string>,
@@ -34,6 +42,10 @@ export default class Configuration {
 			unlimitedRoles: string[],
 			commandChannels: string[],
 			moderatorUserId: string
+			guild: string,
+			establishedMemberJsonFile: string,
+			establishedMemberRole: string,
+			establishedMemberExcludedCategories: string[],
 		}
 	) {
 		this.token = Configuration.ensureNonNull(token, 'token');
@@ -45,6 +57,12 @@ export default class Configuration {
 		this.unlimitedRoles = Configuration.ensureNonNull(unlimitedRoles, 'unlimitedRoles');
 		this.commandChannels = Configuration.ensureNonNull(commandChannels, 'commandChannels');
 		this.moderatorUserId = Configuration.ensureNonNull(moderatorUserId, 'moderatorUserId');
+		this.guild = Configuration.ensureNonNull(guild, 'guild');
+		this.establishedMemberJsonFile =
+			Configuration.ensureNonNull(establishedMemberJsonFile, 'establishedMemberJsonFile');
+		this.establishedMemberRole = Configuration.ensureNonNull(establishedMemberRole, 'establishedMemberRole');
+		this.establishedMemberExcludedCategories =
+			Configuration.ensureNonNull(establishedMemberExcludedCategories, 'establishedMemberExcludedCategories');
 	}
 
 	private static ensureNonNull<T>(value: T, key: string) : T {

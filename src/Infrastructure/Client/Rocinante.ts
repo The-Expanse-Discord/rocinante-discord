@@ -1,5 +1,5 @@
 import { ActivityType, Client, ClientOptions } from 'discord.js';
-import { CommandHandler, RoleHandler } from '../Handlers';
+import { CommandHandler, EstablishedMemberHandler, RoleHandler } from '../Handlers';
 import { configDiscordClient } from './Config';
 import APoD from '../../Commands/Nerd/APoD';
 import XKCD from '../../Commands/Nerd/XKCD';
@@ -15,12 +15,14 @@ import Miller from '../../Commands/Nerd/Miller';
 export default class Rocinante extends Client {
 	public readonly prefix: string;
 	private ready: boolean;
+	private lastSigint: number = 0;
 
 	public statusType: ActivityType;
 	public statusText: string;
 
 	public commandHandler: CommandHandler;
 	public readonly roleManager: RoleHandler;
+	public readonly establishedMemberHandler: EstablishedMemberHandler;
 
 	public constructor(clientOptions?: ClientOptions) {
 		super(clientOptions);
@@ -41,6 +43,14 @@ export default class Rocinante extends Client {
 			configDiscordClient.moderatorUserId
 		);
 
+		this.establishedMemberHandler = new EstablishedMemberHandler(
+			this,
+			configDiscordClient.establishedMemberJsonFile,
+			configDiscordClient.establishedMemberRole,
+			configDiscordClient.establishedMemberExcludedCategories,
+			configDiscordClient.guild
+		);
+
 		this.ready = false;
 	}
 
@@ -50,6 +60,11 @@ export default class Rocinante extends Client {
 
 	public async start(): Promise<void> {
 		await this.init();
+	}
+
+	private async shutdown(): Promise<void> {
+		await this.establishedMemberHandler.shutdown();
+		this.destroy();
 	}
 
 	private async init(): Promise<void> {
@@ -63,6 +78,7 @@ export default class Rocinante extends Client {
 			}
 
 			await this.roleManager.init();
+			await this.establishedMemberHandler.init();
 			this.commandHandler.init([ APoD, XKCD, Avasarala, Miller ]);
 
 			console.log('The Rocinante is Ready');
@@ -70,7 +86,7 @@ export default class Rocinante extends Client {
 		});
 
 		this.on('disconnect', () => {
-			process.exit(100);
+			this.shutdown();
 		});
 
 		if (this.token) {
@@ -80,5 +96,15 @@ export default class Rocinante extends Client {
 		} else {
 			console.log('No token present');
 		}
+
+		process.on('SIGINT', () => {
+			console.log('Caught interrupt signal');
+			if (this.lastSigint === 0 || Date.now() - this.lastSigint < 100) {
+				this.lastSigint = Date.now();
+				this.shutdown();
+			} else {
+				process.exit(100);
+			}
+		});
 	}
 }
