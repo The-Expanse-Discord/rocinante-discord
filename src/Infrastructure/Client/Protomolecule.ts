@@ -78,10 +78,6 @@ export default class Protomolecule extends Client {
 			console.log('No token present');
 		}
 
-		try {
-			this.commandHandler.init([ APoD, XKCD, Avasarala ]);
-		} catch (error) {
-			console.log('Unable to load commands');
-		}
+		this.commandHandler.init([ APoD, XKCD, Avasarala ]);
 	}
 }
