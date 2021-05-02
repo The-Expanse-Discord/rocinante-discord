@@ -227,7 +227,7 @@ export class RoleHandler {
 	}
 
 	private async ensureShowEmbed(channel: TextChannel, messages: Collection<string, Message>) : Promise<Message> {
-		const description: string = 'Still watching the show for the first time? Select the seasons you’ve seen, ' +
+		const description: string = 'Watching the show for the first time? Select the seasons you’ve seen, ' +
 			'and you’ll be able to see the channels corresponding to each of them. As you progress through the show, ' +
 			'you can come back and select more roles.';
 		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse Show', description, 'https://i.imgur.com/57CXARX.png');
