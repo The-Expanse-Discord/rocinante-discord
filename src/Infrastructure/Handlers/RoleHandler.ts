@@ -235,7 +235,8 @@ export class RoleHandler {
 			Emoji.Season1,
 			Emoji.Season2,
 			Emoji.Season3,
-			Emoji.Season4
+			Emoji.Season4,
+			Emoji.Season5
 		]);
 		return message;
 	}
@@ -275,6 +276,8 @@ export class RoleHandler {
 			'allow spoilers, like our general hangout channels. Access to additional channels is ' +
 			'determined by what roles you have as a community member. You can assign the roles you’d ' +
 			'like to have on this page by clicking the reaction emoji below each of the following messages.' +
+			'The color of your display name will change depending on the roles you select. By looking at other ' +
+			'users’ colors and clicking their names to view their roles, you can tell what they’ve seen and read.' +
 			'\n\nIf you have questions about using this page, feel free to ' +
 			`DM ${ moderatorUser } to get in touch with the moderation team.`;
 
