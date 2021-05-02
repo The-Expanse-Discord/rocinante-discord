@@ -24,7 +24,7 @@ export default class XKCD extends Command {
 			group: [ 'nerd' ],
 			roles: [],
 			commandsPerMinute: 0.5,
-			commandSurgeMax: 1.5
+			commandSurgeMax: 1.5,
 		});
 	}
 

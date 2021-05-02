@@ -65,7 +65,7 @@ export class RoleHandler {
 					this.ensureCurrentEmbed(channel, messages),
 					this.ensureShowEmbed(channel, messages),
 					this.ensureBookEmbed(channel, messages),
-					this.ensureNovellaEmbed(channel, messages)
+					this.ensureNovellaEmbed(channel, messages),
 				]);
 				await this.ensureFinalMessage(channel, messages);
 			})
@@ -179,7 +179,7 @@ export class RoleHandler {
 			'https://i.imgur.com/OqPycws.png'
 		);
 		await this.reactWith(message, [
-			Emoji.LangBeltaLearner
+			Emoji.LangBeltaLearner,
 		]);
 		return message;
 	}
@@ -197,7 +197,7 @@ export class RoleHandler {
 			Emoji.NemesisGames,
 			Emoji.BabylonsAshes,
 			Emoji.PersepolisRising,
-			Emoji.TiamatsWrath
+			Emoji.TiamatsWrath,
 		]);
 		return message;
 	}
@@ -221,7 +221,7 @@ export class RoleHandler {
 			Emoji.TheVitalAbyss,
 			Emoji.StrangeDogs,
 			Emoji.TheLastFlightOfTheCassandra,
-			Emoji.Auberon
+			Emoji.Auberon,
 		]);
 		return message;
 	}
@@ -236,7 +236,7 @@ export class RoleHandler {
 			Emoji.Season2,
 			Emoji.Season3,
 			Emoji.Season4,
-			Emoji.Season5
+			Emoji.Season5,
 		]);
 		return message;
 	}
@@ -260,7 +260,7 @@ export class RoleHandler {
 		await this.reactWith(message, [
 			Emoji.CurrentAll,
 			Emoji.CurrentShow,
-			Emoji.CurrentBook
+			Emoji.CurrentBook,
 		]);
 		return message;
 	}

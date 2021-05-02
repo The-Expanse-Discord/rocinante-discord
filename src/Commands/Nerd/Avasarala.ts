@@ -15,7 +15,7 @@ const avasaralaImages : string[] = [
 	'http://i.imgur.com/FrZHD72.png',
 	'http://i.imgur.com/l9B8QNj.png',
 	'http://i.imgur.com/a3HUir3.png',
-	'http://i.imgur.com/270wrQm.png'
+	'http://i.imgur.com/270wrQm.png',
 ];
 const avasaralaQuotes : string[] = [
 	'Realizing you\'ve got shit on your fingers is the first step to washing your hands.',
@@ -69,7 +69,7 @@ const avasaralaQuotes : string[] = [
 	'He can\'t find his cock with both hands unless there\'s someone there to point him at it.',
 	'He\'s a fucking busybody and he should stop putting his fingers in my shit.',
 	'I don\'t mean that they all fuck men. I mean they\'re all men, the fuckers.',
-	'How the fuck do you keep your hair like that? I look like a hedgehog\'s been humping my skull.'
+	'How the fuck do you keep your hair like that? I look like a hedgehog\'s been humping my skull.',
 ];
 
 export default class Avasarala extends Command {
@@ -82,7 +82,7 @@ export default class Avasarala extends Command {
 			group: [ 'nerd' ],
 			roles: [],
 			commandsPerMinute: 5,
-			commandSurgeMax: 2.0
+			commandSurgeMax: 2.0,
 		});
 	}
 

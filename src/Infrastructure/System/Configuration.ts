@@ -23,7 +23,7 @@ export default class Configuration {
 			statusText,
 			unlimitedRoles,
 			commandChannels,
-			moderatorUserId
+			moderatorUserId,
 		}:
 		{
 			welcomeChannels: Record<string, string>,

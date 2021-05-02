@@ -87,7 +87,7 @@ export class Nerd {
 			title,
 			desc,
 			img,
-			video
+			video,
 		};
 	}
 

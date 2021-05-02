@@ -88,7 +88,13 @@
 		"camelcase": "off",
 		"capitalized-comments": "off",
 		"class-methods-use-this": "off",
-		"comma-dangle": [ "error", "never" ],
+		"comma-dangle": ["error", {
+			"arrays": "always-multiline",
+			"objects": "always-multiline",
+			"imports": "never",
+			"exports": "never",
+			"functions": "never"
+		}],
 		"comma-spacing": [ "error", { "before": false, "after": true } ],
 		"comma-style": [ "error", "last" ],
 		"complexity": [ "warn", 20 ],

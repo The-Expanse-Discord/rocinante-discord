@@ -11,7 +11,7 @@ const constants: Constants = {
 	urlXkcd: 'https://xkcd.com/',
 	urlApod: 'https://apod.nasa.gov/apod/astropix.html',
 	urlApodImgBase: 'https://apod.nasa.gov/apod/',
-	urlApodRandom: 'https://apod.nasa.gov/apod/ap'
+	urlApodRandom: 'https://apod.nasa.gov/apod/ap',
 };
 
 export default constants;
