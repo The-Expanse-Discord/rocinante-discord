@@ -248,18 +248,19 @@ export class RoleHandler {
 			this.client.emojis.cache.find(emoji => emoji.name === Emoji.CurrentShow);
 		const currentAllEmoji: GuildEmoji | undefined =
 			this.client.emojis.cache.find(emoji => emoji.name === Emoji.CurrentAll);
-		const description: string = 'If you’re all caught up on the show, books, or both, the reactions here ' +
-			'will quickly ' +
-			`allow you to see all the Expanse discussion channels. Select ${ currentBookEmoji } if you’ve ` +
-			`read all the books and novellas released so far, ${ currentShowEmoji } if you’ve seen all ` +
-			`the aired episodes of the show, and ${ currentAllEmoji } if you’ve seen and read everything. ` +
-			'If you select these, there’s no need to select individual season or book roles further down.';
+		const description: string = `Click ${ currentAllEmoji } if you’re caught up on the ` +
+			'books, novellas, and show ' +
+			`(or if you just don’t mind seeing spoilers), ${ currentShowEmoji } if you’ve seen all ` +
+			`the episodes that have aired, or ${ currentBookEmoji } if you’ve ` +
+			'read all the books and novellas that have been released. When a new season or book is ' +
+			'released, we wait a little while and make an announcement before adding it to the ' +
+			'"Current" roles.';
 		const message: Message =
-			await this.ensureEmbed(channel, messages, 'All Expanse Discussion', description, 'https://i.imgur.com/eQPqYYI.png');
+			await this.ensureEmbed(channel, messages, 'Current Expanse Discussion', description, 'https://i.imgur.com/eQPqYYI.png');
 		await this.reactWith(message, [
+			Emoji.CurrentAll,
 			Emoji.CurrentShow,
-			Emoji.CurrentBook,
-			Emoji.CurrentAll
+			Emoji.CurrentBook
 		]);
 		return message;
 	}
