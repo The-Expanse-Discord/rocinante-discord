@@ -1,5 +1,5 @@
 {
-	"name": "@the-expanse-discord/protomolecule",
+	"name": "@the-expanse-discord/rocinante-discord",
 	"description": "General purpose bot for The Expanse Discord server.",
 	"main": "bin/index.js",
 	"version": "3.1.8",
@@ -9,11 +9,11 @@
 		"John Daniels (https://github.com/johndaniels)",
 		"acdcfanbill (https://github.com/acdcfanbill)"
 	],
-	"repository": "https://github.com/The-Expanse-Discord/Protomolecule.git",
-	"homepage": "https://github.com/The-Expanse-Discord/Protomolecule#readme",
-	"bugs": "https://github.com/The-Expanse-Discord/Protomolecule/issues",
+	"repository": "https://github.com/The-Expanse-Discord/rocinante-discord.git",
+	"homepage": "https://github.com/The-Expanse-Discord/rocinante-discord#readme",
+	"bugs": "https://github.com/The-Expanse-Discord/rocinante-discord/issues",
 	"bin": {
-		"protomolecule": "bin/protomolecule.js"
+		"rocinante-discord": "bin/rocinante-discord.js"
 	},
 	"scripts": {
 		"code:lint": "eslint './src/**/*.ts'",

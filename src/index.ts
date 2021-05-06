@@ -1,5 +1,5 @@
-import Protomolecule from './Infrastructure/Client/Protomolecule';
+import Rocinante from './Infrastructure/Client/Rocinante';
 
 export function infect(): void {
-	new Protomolecule({ partials: [ 'MESSAGE', 'CHANNEL', 'REACTION' ] }).start();
+	new Rocinante({ partials: [ 'MESSAGE', 'CHANNEL', 'REACTION' ] }).start();
 }

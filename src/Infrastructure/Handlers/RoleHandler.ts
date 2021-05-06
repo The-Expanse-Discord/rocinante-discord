@@ -12,7 +12,7 @@ import {
 	GuildEmoji
 } from 'discord.js';
 import { Emoji } from '../Enums/Role Assignment';
-import Protomolecule from '../Client/Protomolecule';
+import Rocinante from '../Client/Rocinante';
 import constants from '../../Utils/Constants';
 import RateLimiter from '../Managers/RateLimiter';
 
@@ -20,7 +20,7 @@ import RateLimiter from '../Managers/RateLimiter';
 const COST_PER_ROLE_CHANGE : number = 1;
 
 export class RoleHandler {
-	private readonly client: Protomolecule;
+	private readonly client: Rocinante;
 	private readonly serverChannelMapping: Record<string, string>;
 	private readonly guildEmojiLookup: Record<string, Record<string, GuildEmoji> >;
 	private readonly guildMessageLookup: Record<string, Message[] >;
@@ -28,11 +28,11 @@ export class RoleHandler {
 	private readonly moderatorUserId: string;
 
 	public constructor(
-		protomolecule: Protomolecule,
+		rocinante: Rocinante,
 		serverChannelMapping: Record<string, string>,
 		moderatorUserId: string
 	) {
-		this.client = protomolecule;
+		this.client = rocinante;
 		this.serverChannelMapping = serverChannelMapping;
 		this.guildEmojiLookup = {};
 		this.guildMessageLookup = {};

@@ -1,10 +1,10 @@
-# Protomolecule
+# Rocinante Discord Bot
 <!-- [![Discord](https://discordapp.com/api/guilds/288472445822959618/embed.png)](https://discord.gg/js6mUj5) -->
 
-[![build](https://github.com/The-Expanse-Discord/Protomolecule/workflows/build/badge.svg?branch=base)](https://github.com/The-Expanse-Discord/Protomolecule/actions?query=workflow%3Abuild)
+[![build](https://github.com/The-Expanse-Discord/rocinante-discord/workflows/build/badge.svg?branch=base)](https://github.com/The-Expanse-Discord/rocinante-discord/actions?query=workflow%3Abuild)
 
-[![dependencies Status](https://david-dm.org/the-expanse-discord/protomolecule/status.svg)](https://david-dm.org/the-expanse-discord/protomolecule)
-[![devDependencies Status](https://david-dm.org/the-expanse-discord/protomolecule/dev-status.svg)](https://david-dm.org/the-expanse-discord/protomolecule?type=dev)
+[![dependencies Status](https://david-dm.org/the-expanse-discord/rocinante-discord/status.svg)](https://david-dm.org/the-expanse-discord/rocinante-discord)
+[![devDependencies Status](https://david-dm.org/the-expanse-discord/rocinante-discord/dev-status.svg)](https://david-dm.org/the-expanse-discord/rocinante-discord?type=dev)
 
 General purpose bot for The Expanse Discord server.
 
@@ -30,13 +30,13 @@ Put the following in a file named config.json5:
 ```
 
 Use npx to run the bot:
-`npx @johndaniels/protomolecule config.json`
+`npx @the-expanse-discord/rocinante-discord config.json`
 
 Or install the command and run it:
 ```sh
-npm install -g @johndaniels/protomolecule
+npm install -g @the-expanse-discord/rocinante-discord
 
-protomolecule cconfig.json5
+rocinante-discord cconfig.json5
 ```
 
 
@@ -61,7 +61,7 @@ npm run dev
 	- `statusText` - Accompanying text for the bot status.
 	- `unlimitedRoles` - Names of roles that aren't affected by rate limiting.
 	- `commandChannels` - Lists which channels to respond to commands in. Use "all" in the list to respond in all visible channels.
-	- `welcomeChannels` - A mapping of guild IDs to welcome channels. Protomolecule will use these to automatically create a welcome message and messages to react to.
+	- `welcomeChannels` - A mapping of guild IDs to welcome channels. The Rocinante will use these to automatically create a welcome message and messages to react to.
 
 After running these, you will also need to set up any guilds in welcomeChannels with the appropriate emoji and roles.
 

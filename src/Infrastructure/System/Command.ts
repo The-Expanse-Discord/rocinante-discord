@@ -1,11 +1,11 @@
 import { CommandInfo } from '../Interfaces/Command';
 import { Message } from 'discord.js';
-import Protomolecule from '../Client/Protomolecule';
+import Rocinante from '../Client/Rocinante';
 
 /**
  * @category System
  */
-export abstract class Command<T extends Protomolecule = Protomolecule> {
+export abstract class Command<T extends Rocinante = Rocinante> {
 	public client!: T;
 
 	public name!: string;

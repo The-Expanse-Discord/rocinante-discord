@@ -7,12 +7,12 @@ import XKCD from '../../Commands/Nerd/XKCD';
 import Avasarala from '../../Commands/Nerd/Avasarala';
 
 /**
- * ## Protomolecule
- * The heart of Protomolecule.
+ * ## Rocinante
+ * The heart of the Rocinante.
  *
  * @category System
  */
-export default class Protomolecule extends Client {
+export default class Rocinante extends Client {
 	public readonly prefix: string;
 	private ready: boolean;
 
@@ -68,7 +68,7 @@ export default class Protomolecule extends Client {
 			await this.roleManager.init();
 			this.commandHandler.init([ APoD, XKCD, Avasarala ]);
 
-			console.log('Protomolecule Ready');
+			console.log('The Rocinante is Ready');
 			this.ready = true;
 		});
 

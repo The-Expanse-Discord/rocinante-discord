@@ -1,19 +1,19 @@
 import { Command } from '../System/Command';
 import { Message, GuildMember, User, PartialUser } from 'discord.js';
-import Protomolecule from '../Client/Protomolecule';
+import Rocinante from '../Client/Rocinante';
 import RateLimiter from '../Managers/RateLimiter';
 
 /**
  * @category Handler
  */
 export class CommandHandler {
-	private readonly client: Protomolecule;
+	private readonly client: Rocinante;
 	private readonly limiters: Record<string, RateLimiter>;
 	private readonly unlimitedRoles: string[];
 	private readonly commandChannels: string[];
 	private readonly allCommandChannels: boolean;
 
-	public constructor(proto: Protomolecule, unlimitedRoles: string[], commandChannels: string[]) {
+	public constructor(proto: Rocinante, unlimitedRoles: string[], commandChannels: string[]) {
 		this.limiters = {};
 		this.client = proto;
 		this.unlimitedRoles = unlimitedRoles;
