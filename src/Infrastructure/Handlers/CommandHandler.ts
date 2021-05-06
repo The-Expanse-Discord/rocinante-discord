@@ -15,7 +15,6 @@ export class CommandHandler {
 	private readonly allCommandChannels: boolean;
 	private readonly commands: Collection<string, Command>;
 
-
 	public constructor(proto: Rocinante, unlimitedRoles: string[], commandChannels: string[]) {
 		this.limiters = {};
 		this.client = proto;

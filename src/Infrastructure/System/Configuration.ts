@@ -31,7 +31,7 @@ export default class Configuration {
 			guild,
 			establishedMemberJsonFile,
 			establishedMemberRole,
-			establishedMemberExcludedCategories
+			establishedMemberExcludedCategories,
 		}:
 		{
 			welcomeChannels: Record<string, string>,
