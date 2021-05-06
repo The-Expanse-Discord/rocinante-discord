@@ -1,5 +1,5 @@
 import { Command } from '../System/Command';
-import { Message, GuildMember, User, PartialUser } from 'discord.js';
+import { Collection, Message, GuildMember, User, PartialUser } from 'discord.js';
 import Rocinante from '../Client/Rocinante';
 import RateLimiter from '../Managers/RateLimiter';
 
@@ -12,6 +12,8 @@ export class CommandHandler {
 	private readonly unlimitedRoles: string[];
 	private readonly commandChannels: string[];
 	private readonly allCommandChannels: boolean;
+	private readonly commands: Collection<string, Command>;
+
 
 	public constructor(proto: Rocinante, unlimitedRoles: string[], commandChannels: string[]) {
 		this.limiters = {};
@@ -19,6 +21,7 @@ export class CommandHandler {
 		this.unlimitedRoles = unlimitedRoles;
 		this.commandChannels = commandChannels;
 		this.allCommandChannels = commandChannels.includes('all');
+		this.commands = new Collection;
 	}
 
 	public init(commands: (new () => Command)[]): void {
@@ -45,7 +48,7 @@ export class CommandHandler {
 		let issuedCommand: string | undefined = args.shift();
 		issuedCommand = issuedCommand ? issuedCommand.toLowerCase() : '';
 
-		const fetchedCommand: Command | undefined = this.client.commands.get(issuedCommand);
+		const fetchedCommand: Command | undefined = this.commands.get(issuedCommand);
 
 		if (fetchedCommand && message.member) {
 			if (fetchedCommand.roles.length === 0 || this.hasRoles(message.member, fetchedCommand)) {
@@ -93,7 +96,7 @@ export class CommandHandler {
 				commandInstance.commandSurgeMax);
 			for (const cmd in commandInstance.command) {
 				if ({}.hasOwnProperty.call(commandInstance.command, cmd)) {
-					this.client.commands.set(
+					this.commands.set(
 						commandInstance.command[cmd].toLowerCase(),
 						commandInstance.init(this.client)
 					);

@@ -1,10 +1,10 @@
-import { ActivityType, Client, ClientOptions, Collection } from 'discord.js';
-import { Command } from '../System/Command';
+import { ActivityType, Client, ClientOptions } from 'discord.js';
 import { CommandHandler, RoleHandler } from '../Handlers';
 import { configDiscordClient } from './Config';
 import APoD from '../../Commands/Nerd/APoD';
 import XKCD from '../../Commands/Nerd/XKCD';
 import Avasarala from '../../Commands/Nerd/Avasarala';
+import Miller from '../../Commands/Nerd/Miller';
 
 /**
  * ## Rocinante
@@ -21,8 +21,6 @@ export default class Rocinante extends Client {
 
 	public commandHandler: CommandHandler;
 	public readonly roleManager: RoleHandler;
-
-	public commands: Collection<string, Command>;
 
 	public constructor(clientOptions?: ClientOptions) {
 		super(clientOptions);
@@ -43,7 +41,6 @@ export default class Rocinante extends Client {
 			configDiscordClient.moderatorUserId
 		);
 
-		this.commands = new Collection;
 		this.ready = false;
 	}
 
@@ -66,7 +63,7 @@ export default class Rocinante extends Client {
 			}
 
 			await this.roleManager.init();
-			this.commandHandler.init([ APoD, XKCD, Avasarala ]);
+			this.commandHandler.init([ APoD, XKCD, Avasarala, Miller ]);
 
 			console.log('The Rocinante is Ready');
 			this.ready = true;
