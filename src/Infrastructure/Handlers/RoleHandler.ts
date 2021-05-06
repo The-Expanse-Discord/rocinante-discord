@@ -15,6 +15,7 @@ import { Emoji } from '../Enums/Role Assignment';
 import Rocinante from '../Client/Rocinante';
 import constants from '../../Utils/Constants';
 import RateLimiter from '../Managers/RateLimiter';
+import logger from '../../Utils/logger';
 
 // This amounts to 1 second per role change
 const COST_PER_ROLE_CHANGE : number = 1;
@@ -57,8 +58,6 @@ export class RoleHandler {
 		);
 		await Promise.all(
 			channelsList.map(async([ channel, messages ]) => {
-				console.log(channel.id);
-				console.log(channel.guild.id);
 				await this.ensureIntro(channel, messages);
 				this.guildMessageLookup[channel.guild.id] = await Promise.all([
 					this.ensureLearnerEmbed(channel, messages),
@@ -78,7 +77,7 @@ export class RoleHandler {
 			if (!this.client.isReady()) {
 				return;
 			}
-			console.log(`received message of type ${ packet.t }`);
+			logger.info(`received message of type ${ packet.t }`);
 			if ([ 'MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE' ].includes(packet.t)) {
 				// Grab the channel to check the message from
 				const channel : TextChannel = this.client.channels.cache.get(packet.d.channel_id) as TextChannel;
@@ -91,7 +90,7 @@ export class RoleHandler {
 					packet.d.emoji.name;
 				const reaction : MessageReaction | undefined = message.reactions.cache.get(emoji);
 				if (!reaction) {
-					console.log(`No reaction matching id ${ emoji } on message`);
+					logger.info(`No reaction matching id ${ emoji } on message`);
 					return;
 				}
 				if (user.bot) {
@@ -328,7 +327,6 @@ export class RoleHandler {
 		let role: Role | undefined;
 
 		if (lowerRoleName) {
-			console.log(lowerRoleName);
 			role = reaction.message.guild.roles.cache
 				.find(r => r.name.replace(/'/g, '').replace(/ /g, '')
 					.toLowerCase()
@@ -339,13 +337,13 @@ export class RoleHandler {
 
 	private async rateLimitWarnUser(user: User | PartialUser): Promise<void> {
 		try {
-			console.log('trying to message user');
+			logger.info('trying to message user');
 			const wait: number = this.limiter.numberOfIntervalsUntilAmountCanBeRemoved(user.id, COST_PER_ROLE_CHANGE);
 			const message: string =
 				`Roles being changed too quickly, please wait ${ wait.toString() } seconds before setting more roles `;
 			await user.send(message);
 		} catch (error) {
-			console.log('Something went wrong when sending user a rate limit message: ', error);
+			logger.info('Something went wrong when sending user a rate limit message: ', error);
 			return;
 		}
 	}
@@ -380,16 +378,16 @@ export class RoleHandler {
 
 				if (role) {
 					if (shouldHaveRole) {
-						console.log(`Adding role ${ role.name } to member ${ member.displayName }`);
+						logger.info(`Adding role ${ role.name } to member ${ member.displayName }`);
 						await member.roles.add(role);
 					} else {
-						console.log(`Removing role ${ role.name } from member ${ member.displayName }`);
+						logger.info(`Removing role ${ role.name } from member ${ member.displayName }`);
 						await member.roles.remove(role);
 					}
 				}
 			}
 		} catch (error) {
-			console.log('Something went wrong when fetching the message: ', error);
+			logger.info('Something went wrong when fetching the message: ', error);
 			return;
 		}
 	}

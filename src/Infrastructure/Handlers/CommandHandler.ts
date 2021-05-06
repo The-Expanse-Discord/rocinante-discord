@@ -2,6 +2,7 @@ import { Command } from '../System/Command';
 import { Collection, Message, GuildMember, User, PartialUser } from 'discord.js';
 import Rocinante from '../Client/Rocinante';
 import RateLimiter from '../Managers/RateLimiter';
+import logger from '../../Utils/logger';
 
 /**
  * @category Handler
@@ -74,15 +75,15 @@ export class CommandHandler {
 
 	private static async rateLimitWarnUser(commands: string[], user: User | PartialUser, wait: number): Promise<void> {
 		try {
-			console.log('trying to message user');
-			console.log('command used: ', commands);
+			logger.info('trying to message user');
+			logger.info('command used: ', commands);
 			const message: string = 'Command(s): \''.concat(commands.toString(),
 				'\' are being used too quickly.  Please wait ',
 				Math.round(wait).toString(),
 				' second(s) before using this command again.');
 			await user.send(message);
 		} catch (error) {
-			console.log('Something went wrong when sending user a rate limit message: ', error);
+			logger.info('Something went wrong when sending user a rate limit message: ', error);
 			return;
 		}
 	}
@@ -103,7 +104,7 @@ export class CommandHandler {
 				}
 			}
 
-			console.log(`${ commandInstance.name } loaded`);
+			logger.info(`${ commandInstance.name } loaded`);
 		}
 	}
 

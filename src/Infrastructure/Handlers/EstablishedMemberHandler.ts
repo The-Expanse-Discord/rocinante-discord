@@ -1,6 +1,7 @@
 import { Message, GuildMember, TextChannel, Guild, Role } from 'discord.js';
 import Rocinante from '../Client/Rocinante';
 import { promises as fs } from 'fs';
+import logger from '../../Utils/logger';
 
 /**
  * @category Handler
@@ -84,7 +85,7 @@ export class EstablishedMemberHandler {
 				this.chatCounts[userId] > 10 &&
 				!member.roles.cache.get(role.id)
 			) {
-				console.log(`Adding role ${ this.establishedMemberRole } to member ${ member.displayName }`);
+				logger.info(`Adding role ${ this.establishedMemberRole } to member ${ member.displayName }`);
 				await member.roles.add(role);
 				// Force a refetch so the role is stored in the cache and we don't refetch it every time.
 				await member.fetch(true);
@@ -115,7 +116,7 @@ export class EstablishedMemberHandler {
 	}
 
 	private async heartbeat(): Promise<void> {
-		console.log('Serious discussion handler heartbeat');
+		logger.info('Serious discussion handler heartbeat');
 		await this.save();
 		await this.assignRoles();
 		this.timeout = setTimeout(() => this.heartbeat(), 10000);

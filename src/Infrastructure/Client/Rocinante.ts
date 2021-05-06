@@ -5,6 +5,7 @@ import APoD from '../../Commands/Nerd/APoD';
 import XKCD from '../../Commands/Nerd/XKCD';
 import Avasarala from '../../Commands/Nerd/Avasarala';
 import Miller from '../../Commands/Nerd/Miller';
+import logger from '../../Utils/logger';
 
 /**
  * ## Rocinante
@@ -81,7 +82,7 @@ export default class Rocinante extends Client {
 			await this.establishedMemberHandler.init();
 			this.commandHandler.init([ APoD, XKCD, Avasarala, Miller ]);
 
-			console.log('The Rocinante is Ready');
+			logger.info('The Rocinante is Ready');
 			this.ready = true;
 		});
 
@@ -92,13 +93,13 @@ export default class Rocinante extends Client {
 		if (this.token) {
 			await this.login(this.token);
 
-			console.log('Logged in');
+			logger.info('Logged in');
 		} else {
-			console.log('No token present');
+			logger.info('No token present');
 		}
 
 		process.on('SIGINT', () => {
-			console.log('Caught interrupt signal');
+			logger.info('Caught interrupt signal');
 			if (this.lastSigint === 0 || Date.now() - this.lastSigint < 100) {
 				this.lastSigint = Date.now();
 				this.shutdown();
