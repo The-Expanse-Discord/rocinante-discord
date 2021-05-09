@@ -1,7 +1,6 @@
 
 import { Command } from '../Infrastructure/System/Command';
 import { Message, MessageEmbed } from 'discord.js';
-import { Nerd } from '../Utils';
 import get, { AxiosResponse } from 'axios';
 
 // rss feeds
@@ -49,7 +48,7 @@ export default class XKCD extends Command {
 		}
 
 		const comicNumber: number | undefined =
-			args[0] && Nerd.isNumerical(args[0]) ? Number(args[0]) : undefined;
+			args[0] && XKCD.isNumerical(args[0]) ? Number(args[0]) : undefined;
 
 		await XKCD.fetchComic(comicNumber, isRandom)
 			.then((response: MessageEmbed | string): void => {
@@ -98,6 +97,10 @@ export default class XKCD extends Command {
 			.setURL(`${ urlXkcd }${ item.num }/`)
 			.setImage(item.img)
 			.setFooter(item.alt);
+	}
+
+	private static isNumerical(s: string | number): s is number {
+		return !Number.isNaN(Number(s.toString()));
 	}
 }
 
