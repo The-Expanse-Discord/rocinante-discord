@@ -45,6 +45,11 @@ export class CommandHandler {
 		}
 		const args: string[] = message.content.slice(this.client.prefix.length).split(/ +/);
 
+		if (args[0] === 'help') {
+			await this.processHelp(message, args);
+			return;
+		}
+
 		let issuedCommand: string | undefined = args.shift();
 		issuedCommand = issuedCommand ? issuedCommand.toLowerCase() : '';
 
@@ -70,6 +75,53 @@ export class CommandHandler {
 				}
 			}
 		}
+	}
+
+	private async processHelp(message: Message, args: string[]): Promise<void> {
+		if (args.length === 1) {
+			// No specific help requested, list commands
+			await this.topLevelHelp(message);
+		} else {
+			await this.commandHelp(message, args);
+		}
+	}
+
+	private async commandHelp(message: Message, args: string[]): Promise<void> {
+		const maybeCommand: Command | undefined = this.commands.find(command => command.command.includes(args[1]));
+		if (maybeCommand) {
+			const command: Command = maybeCommand;
+
+			const argumentDescriptions: string = command.argumentDescriptions.map(
+				description => `    ${ description.name.padEnd(8, ' ')}${description.description}`
+			).join('\n');
+
+			const argumentHelp: string = argumentDescriptions.length > 0 ?
+				`Arguments:\n${ argumentDescriptions }\n\n` : '';
+
+			const help: string = '```\n' +
+				`${ command.description }\n\n` +
+				`Usage: ${ command.usage.replace('<prefix>', this.client.prefix) }\n\n` +
+				`${ argumentHelp }` +
+				'```';
+			await message.channel.send(help);
+		} else {
+			await message.channel.send('```Unrecognized Command. Use ' +
+				`'${ this.client.prefix }help' to get a list of commands` +
+				'```');
+		}
+	}
+
+	private async topLevelHelp(message: Message): Promise<void> {
+		const commandList: string = this.commands.array()
+			.map(command => `    ${ command.command.join(',').padEnd(10, ' ') }${ command.description }`)
+			.join('\n');
+
+		const help: string = '```\nRocinante Help\n\n' +
+			`Use '${ this.client.prefix }help <command>' to get details about a specific command\n\n` +
+			'Commands:\n' +
+			`${ commandList }` +
+			'```';
+		await message.channel.send(help);
 	}
 
 	private static async rateLimitWarnUser(commands: string[], user: User | PartialUser, wait: number): Promise<void> {

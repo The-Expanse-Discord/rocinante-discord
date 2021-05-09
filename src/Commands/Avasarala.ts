@@ -77,7 +77,8 @@ export default class Avasarala extends Command {
 		super({
 			name: 'Avasarala',
 			command: [ 'ca' ],
-			description: 'A Random Quote from Chrisjen Avasarala',
+			description: 'Respond with a Random Quote from Chrisjen Avasarala',
+			argumentDescriptions: [],
 			usage: '<prefix>ca',
 			roles: [],
 			commandsPerMinute: 5,

@@ -11,7 +11,7 @@ interface APoDContent {
 	video: string | undefined;
 }
 
-const urlApod: string =  'https://apod.nasa.gov/apod/astropix.html';
+const urlApod: string = 'https://apod.nasa.gov/apod/astropix.html';
 const urlApodImgBase: string = 'https://apod.nasa.gov/apod/';
 const urlApodRandom: string = 'https://apod.nasa.gov/apod/ap';
 
@@ -30,8 +30,15 @@ export default class APoD extends Command {
 		super({
 			name: 'APoD',
 			command: [ 'apod' ],
-			description: 'NASA\'s Astronomy Picture of the Day',
-			usage: '<prefix>apod <Argument>?',
+			description: 'Respond with NASA\'s Astronomy Picture of the Day',
+			argumentDescriptions: [
+				{
+					name: 'random',
+					description: 'Set this to \'r\' for a random Picture of the Day. ' +
+						'Otherwise this will be the most recent NASA Picture of the Day'
+				},
+			],
+			usage: '<prefix>apod <random>?',
 			roles: [],
 			commandsPerMinute: 0.5,
 			commandSurgeMax: 1.5,

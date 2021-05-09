@@ -8,7 +8,8 @@ export default class Miller extends Command {
 		super({
 			name: 'Miller',
 			command: [ 'jm' ],
-			description: 'A Random Quote from Josephus Miller',
+			description: 'Respond with a Random Quote from Josephus Miller',
+			argumentDescriptions: [],
 			usage: '<prefix>jm',
 			roles: [],
 			commandsPerMinute: 5,

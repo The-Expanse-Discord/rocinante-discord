@@ -32,8 +32,15 @@ export default class XKCD extends Command {
 		super({
 			name: 'XKCD',
 			command: [ 'xkcd' ],
-			description: 'XKCD Comics',
-			usage: '<prefix>xkcd <Argument>?',
+			description: 'Respond with an XKCD Comic',
+			usage: '<prefix>xkcd <comic>?',
+			argumentDescriptions: [
+				{
+					name: 'comic',
+					description: 'Specify which comic to print. Can be \'r\' for a random comic, ' +
+					'or a number to print a specific comic. Will print the latest comic if unspecified',
+				},
+			],
 			roles: [],
 			commandsPerMinute: 0.5,
 			commandSurgeMax: 1.5,
