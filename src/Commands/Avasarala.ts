@@ -1,5 +1,5 @@
 'use strict';
-import { Command } from '../../Infrastructure/System/Command';
+import { Command } from '../Infrastructure/System/Command';
 import { Message, MessageEmbed } from 'discord.js';
 
 const guildIconURL : string = 'https://cdn.discordapp.com/icons/288472445822959618/2f192af7943f8401fec6b2a2455eb16a.jpg';
@@ -79,7 +79,6 @@ export default class Avasarala extends Command {
 			command: [ 'ca' ],
 			description: 'A Random Quote from Chrisjen Avasarala',
 			usage: '<prefix>ca',
-			group: [ 'nerd' ],
 			roles: [],
 			commandsPerMinute: 5,
 			commandSurgeMax: 2.0,

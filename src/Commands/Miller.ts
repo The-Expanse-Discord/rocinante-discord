@@ -1,6 +1,6 @@
 import * as millerQuotes from './MillerQuotes.json';
 import * as millerImages from './MillerImages.json';
-import { Command } from '../../Infrastructure/System/Command';
+import { Command } from '../Infrastructure/System/Command';
 import { Message, MessageEmbed } from 'discord.js';
 
 export default class Miller extends Command {
@@ -10,7 +10,6 @@ export default class Miller extends Command {
 			command: [ 'jm' ],
 			description: 'A Random Quote from Josephus Miller',
 			usage: '<prefix>jm',
-			group: [ 'nerd' ],
 			roles: [],
 			commandsPerMinute: 5,
 			commandSurgeMax: 2.0,

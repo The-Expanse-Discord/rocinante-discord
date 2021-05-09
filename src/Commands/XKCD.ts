@@ -1,7 +1,7 @@
 
-import { Command } from '../../Infrastructure/System/Command';
+import { Command } from '../Infrastructure/System/Command';
 import { Message, MessageEmbed } from 'discord.js';
-import { Nerd } from '../../Utils';
+import { Nerd } from '../Utils';
 
 /**
  * ## XKCD
@@ -21,7 +21,6 @@ export default class XKCD extends Command {
 			command: [ 'xkcd' ],
 			description: 'XKCD Comics',
 			usage: '<prefix>xkcd <Argument>?',
-			group: [ 'nerd' ],
 			roles: [],
 			commandsPerMinute: 0.5,
 			commandSurgeMax: 1.5,

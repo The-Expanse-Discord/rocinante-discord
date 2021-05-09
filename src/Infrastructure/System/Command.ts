@@ -1,6 +1,15 @@
-import { CommandInfo } from '../Interfaces/Command';
 import { Message } from 'discord.js';
 import Rocinante from '../Client/Rocinante';
+
+export interface CommandInfo {
+	name: string;
+	command: string[];
+	description: string;
+	usage: string;
+	roles: string[];
+	commandsPerMinute: number;
+	commandSurgeMax: number;
+}
 
 /**
  * @category System
@@ -15,8 +24,6 @@ export abstract class Command<T extends Rocinante = Rocinante> {
 	public description!: string;
 
 	public usage!: string;
-
-	public group!: string[];
 
 	public roles!: string[];
 

@@ -1,6 +1,6 @@
-import { Command } from '../../Infrastructure/System/Command';
+import { Command } from '../Infrastructure/System/Command';
 import { Message, MessageEmbed } from 'discord.js';
-import { Nerd } from '../../Utils';
+import { Nerd } from '../Utils';
 
 /**
  * ## APoD
@@ -19,7 +19,6 @@ export default class APoD extends Command {
 			command: [ 'apod' ],
 			description: 'NASA\'s Astronomy Picture of the Day',
 			usage: '<prefix>apod <Argument>?',
-			group: [ 'nerd' ],
 			roles: [],
 			commandsPerMinute: 0.5,
 			commandSurgeMax: 1.5,

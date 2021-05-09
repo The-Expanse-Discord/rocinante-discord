@@ -1,10 +1,10 @@
 import { ActivityType, Client, ClientOptions } from 'discord.js';
 import { CommandHandler, EstablishedMemberHandler, RoleHandler } from '../Handlers';
 import { configDiscordClient } from './Config';
-import APoD from '../../Commands/Nerd/APoD';
-import XKCD from '../../Commands/Nerd/XKCD';
-import Avasarala from '../../Commands/Nerd/Avasarala';
-import Miller from '../../Commands/Nerd/Miller';
+import APoD from '../../Commands/APoD';
+import XKCD from '../../Commands/XKCD';
+import Avasarala from '../../Commands/Avasarala';
+import Miller from '../../Commands/Miller';
 import logger from '../../Utils/logger';
 
 /**
