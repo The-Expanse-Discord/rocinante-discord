@@ -3,7 +3,6 @@ import { Message, MessageEmbed } from 'discord.js';
 import { load } from 'cheerio';
 import get, { AxiosResponse } from 'axios';
 
-
 interface APoDContent {
 	title: string;
 	desc: string;
@@ -35,7 +34,7 @@ export default class APoD extends Command {
 				{
 					name: 'random',
 					description: 'Set this to \'r\' for a random Picture of the Day. ' +
-						'Otherwise this will be the most recent NASA Picture of the Day'
+						'Otherwise this will be the most recent NASA Picture of the Day',
 				},
 			],
 			usage: '<prefix>apod <random>?',

@@ -92,7 +92,7 @@ export class CommandHandler {
 			const command: Command = maybeCommand;
 
 			const argumentDescriptions: string = command.argumentDescriptions.map(
-				description => `    ${ description.name.padEnd(8, ' ')}${description.description}`
+				description => `    ${ description.name.padEnd(8, ' ') }${ description.description }`
 			).join('\n');
 
 			const argumentHelp: string = argumentDescriptions.length > 0 ?

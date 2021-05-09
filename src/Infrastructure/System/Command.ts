@@ -29,7 +29,7 @@ export abstract class Command<T extends Rocinante = Rocinante> {
 
 	public description!: string;
 
-	public argumentDescriptions!: ArgumentDescription[]; 
+	public argumentDescriptions!: ArgumentDescription[];
 
 	public usage!: string;
 

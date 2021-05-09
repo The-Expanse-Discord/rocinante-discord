@@ -107,10 +107,8 @@ export class EstablishedMemberHandler {
 		const establishedMemberRole: Role = maybeEstablishedMemberRole;
 		await Promise.all(
 			Object.keys(this.chatCounts).map(async key => {
-				const member: GuildMember | null = await guild.members.fetch(key);
-				if (member) {
-					await this.assignSingleRole(key, member, establishedMemberRole);
-				}
+				const member: GuildMember = await guild.members.fetch(key);
+				await this.assignSingleRole(key, member, establishedMemberRole);
 			})
 		);
 	}
