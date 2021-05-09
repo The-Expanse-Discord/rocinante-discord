@@ -98,7 +98,7 @@ export default class Avasarala extends Command {
 			.setAuthor('Chrisjen Avasarala says...', guildIconURL)
 			.setThumbnail(image)
 			.addField('\u200b', `"${ quote }"`, false)
-			.setFooter('/u/it-reaches-out');
+			.setFooter('Collected by @it-reaches-out');
 
 		// send the quote
 		await message.channel.send(embed);
