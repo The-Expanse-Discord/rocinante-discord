@@ -13,12 +13,12 @@ import {
 } from 'discord.js';
 import { Emoji } from '../Enums/Role Assignment';
 import Rocinante from '../Client/Rocinante';
-import constants from '../../Utils/Constants';
 import RateLimiter from '../Managers/RateLimiter';
 import logger from '../../Utils/logger';
 
 // This amounts to 1 second per role change
 const COST_PER_ROLE_CHANGE : number = 1;
+const EMBED_COLOR_BASE: string = '#206694';
 
 export class RoleHandler {
 	private readonly client: Rocinante;
@@ -149,7 +149,7 @@ export class RoleHandler {
 		);
 		if (embedMessages.length === 0) {
 			const embed: MessageEmbed = new MessageEmbed;
-			embed.setColor(constants.embedColorBase);
+			embed.setColor(EMBED_COLOR_BASE);
 			embed.setDescription(description);
 			embed.setTitle(title);
 			if (thumbnail !== null) {
