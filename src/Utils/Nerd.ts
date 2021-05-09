@@ -1,5 +1,5 @@
 import { MessageEmbed } from 'discord.js';
-import { APoDContent, Comic } from '../Infrastructure/Interfaces/Nerd';
+import { APoDContent } from '../Infrastructure/Interfaces/Nerd';
 import constants from './Constants';
 import { load } from 'cheerio';
 import get, { AxiosResponse } from 'axios';
@@ -105,45 +105,5 @@ export class Nerd {
 		}
 
 		return embed;
-	}
-
-	public static async fetchComic(n?: number, isRandom?: boolean): Promise<MessageEmbed | string> {
-		let uri: string = constants.rssFeedXkcd;
-		const currentComicCount: number = await this.fetchCurrentComicCount();
-
-		if (isRandom) {
-			const randomComicNumber: number = Math.floor(
-				Math.random() * currentComicCount + 1
-			);
-			uri = `${ constants.urlXkcd }/${ randomComicNumber }/info.0.json`;
-		}
-
-		if (n) {
-			uri = `${ constants.urlXkcd }/${ n }/info.0.json`;
-		}
-
-		if (n && n > currentComicCount) {
-			return `\`${ n }\` exceeds the current maximum amount of comics, \`${ currentComicCount }\`.`;
-		}
-
-		const response: AxiosResponse = await get(uri);
-		const comic: Comic = response.data;
-
-		return this.createXkcdEmbed(comic);
-	}
-
-	private static async fetchCurrentComicCount(): Promise<number> {
-		const response: AxiosResponse = await get(constants.rssFeedXkcd);
-		const result: number = response.data.num;
-
-		return result;
-	}
-
-	private static createXkcdEmbed(item: Comic): MessageEmbed {
-		return (new MessageEmbed)
-			.setTitle(`xkcd: ${ item.title }`)
-			.setURL(`${ constants.urlXkcd }${ item.num }/`)
-			.setImage(item.img)
-			.setFooter(item.alt);
 	}
 }

@@ -2,6 +2,20 @@
 import { Command } from '../Infrastructure/System/Command';
 import { Message, MessageEmbed } from 'discord.js';
 import { Nerd } from '../Utils';
+import get, { AxiosResponse } from 'axios';
+
+// rss feeds
+const rssFeedXkcd: string = 'https://xkcd.com/info.0.json';
+
+// urls
+const urlXkcd: string = 'https://xkcd.com/';
+
+interface Comic {
+	num: number;
+	title: string;
+	img: string;
+	alt: string;
+}
 
 /**
  * ## XKCD
@@ -37,13 +51,53 @@ export default class XKCD extends Command {
 		const comicNumber: number | undefined =
 			args[0] && Nerd.isNumerical(args[0]) ? Number(args[0]) : undefined;
 
-		await Nerd.fetchComic(comicNumber, isRandom)
+		await XKCD.fetchComic(comicNumber, isRandom)
 			.then((response: MessageEmbed | string): void => {
 				message.channel.send(response);
 			})
 			.catch((): void => {
 				message.channel.send(`There was an error retrieving the XKCD Comic.`);
 			});
+	}
+
+	private static async fetchComic(n?: number, isRandom?: boolean): Promise<MessageEmbed | string> {
+		let uri: string = rssFeedXkcd;
+		const currentComicCount: number = await this.fetchCurrentComicCount();
+
+		if (isRandom) {
+			const randomComicNumber: number = Math.floor(
+				Math.random() * currentComicCount + 1
+			);
+			uri = `${ urlXkcd }/${ randomComicNumber }/info.0.json`;
+		}
+
+		if (n) {
+			uri = `${ urlXkcd }/${ n }/info.0.json`;
+		}
+
+		if (n && n > currentComicCount) {
+			return `\`${ n }\` exceeds the current maximum amount of comics, \`${ currentComicCount }\`.`;
+		}
+
+		const response: AxiosResponse = await get(uri);
+		const comic: Comic = response.data;
+
+		return this.createXkcdEmbed(comic);
+	}
+
+	private static async fetchCurrentComicCount(): Promise<number> {
+		const response: AxiosResponse = await get(rssFeedXkcd);
+		const result: number = response.data.num;
+
+		return result;
+	}
+
+	private static createXkcdEmbed(item: Comic): MessageEmbed {
+		return (new MessageEmbed)
+			.setTitle(`xkcd: ${ item.title }`)
+			.setURL(`${ urlXkcd }${ item.num }/`)
+			.setImage(item.img)
+			.setFooter(item.alt);
 	}
 }
 
