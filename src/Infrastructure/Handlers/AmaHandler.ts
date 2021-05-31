@@ -4,12 +4,12 @@ import Rocinante from '../Client/Rocinante';
 /**
  * @category Handler
  */
-export class EventHandler {
+export class AmaHandler {
 	private readonly client: Rocinante;
 	private readonly amaChannel: string;
 
-	public constructor(proto: Rocinante, amaChannel: string) {
-		this.client = proto;
+	public constructor(roci: Rocinante, amaChannel: string) {
+		this.client = roci;
 		this.amaChannel = amaChannel;
 	}
 
