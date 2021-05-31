@@ -7,7 +7,7 @@ import Rocinante from '../Client/Rocinante';
 export class EventHandler {
 	private readonly client: Rocinante;
 	private readonly amaChannel: string;
-	
+
 	public constructor(proto: Rocinante, amaChannel: string) {
 		this.client = proto;
 		this.amaChannel = amaChannel;
@@ -24,7 +24,8 @@ export class EventHandler {
 	}
 
 	public async processMessage(message: Message): Promise<void> {
-		if (message.channel.id === this.amaChannel)
+		if (message.channel.id === this.amaChannel) {
 			await message.react('😄');
+        }
 	}
 }
