@@ -15,6 +15,7 @@ export default class Configuration {
 	public readonly establishedMemberJsonFile: string;
 	public readonly establishedMemberRole: string;
 	public readonly establishedMemberExcludedCategories: string[];
+	public readonly amaChannel: string;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public constructor(
@@ -32,6 +33,7 @@ export default class Configuration {
 			establishedMemberJsonFile,
 			establishedMemberRole,
 			establishedMemberExcludedCategories,
+			amaChannel,
 		}:
 		{
 			welcomeChannels: Record<string, string>,
@@ -46,6 +48,7 @@ export default class Configuration {
 			establishedMemberJsonFile: string,
 			establishedMemberRole: string,
 			establishedMemberExcludedCategories: string[],
+			amaChannel: string,
 		}
 	) {
 		this.token = Configuration.ensureNonNull(token, 'token');
@@ -63,6 +66,7 @@ export default class Configuration {
 		this.establishedMemberRole = Configuration.ensureNonNull(establishedMemberRole, 'establishedMemberRole');
 		this.establishedMemberExcludedCategories =
 			Configuration.ensureNonNull(establishedMemberExcludedCategories, 'establishedMemberExcludedCategories');
+		this.amaChannel = Configuration.ensureNonNull(amaChannel, 'amaChannel');
 	}
 
 	private static ensureNonNull<T>(value: T, key: string) : T {
