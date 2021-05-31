@@ -18,33 +18,32 @@
 	"scripts": {
 		"code:lint": "eslint './src/**/*.ts'",
 		"code:build": "tsc -p ./tsconfig.json",
-		"docs:build": "typedoc",
 		"db:seed": "ts-node ./src/Infrastructure/Database/Inserts/index.ts",
-		"dev": "ts-node ./src/cmd.ts --config config.json5",
+		"dev": "ts-node ./src/cmd.ts",
 		"prepare": "npm run code:build"
 	},
 	"dependencies": {
 		"axios": "^0.21.1",
-		"cheerio": "^1.0.0-rc.5",
-		"discord.js": "^12.5.1",
+		"cheerio": "^1.0.0-rc.9",
+		"discord.js": "^12.5.3",
 		"json5": "^2.2.0",
 		"winston": "^3.3.3",
-		"yargs": "^16.2.0"
+		"yargs": "^16.2.0",
+		"yargs-command-config": "^1.0.5"
 	},
 	"devDependencies": {
-		"@types/cheerio": "^0.22.24",
-		"@types/jest": "^26.0.20",
+		"@types/cheerio": "^0.22.29",
+		"@types/jest": "^26.0.23",
 		"@types/json5": "^0.0.30",
-		"@types/node": "^14.14.32",
-		"@types/yargs": "^16.0.0",
-		"@typescript-eslint/eslint-plugin": "^4.16.1",
-		"@typescript-eslint/parser": "^4.16.1",
-		"eslint": "^7.21.0",
-		"jest": "^26.6.3",
-		"ts-jest": "^26.5.3",
-		"ts-node": "^9.1.1",
-		"typedoc": "^0.20.30",
-		"typescript": "^4.2.3"
+		"@types/node": "^15.6.1",
+		"@types/yargs": "^17.0.0",
+		"@typescript-eslint/eslint-plugin": "^4.25.0",
+		"@typescript-eslint/parser": "^4.25.0",
+		"eslint": "^7.27.0",
+		"jest": "^27.0.3",
+		"ts-jest": "^27.0.2",
+		"ts-node": "^10.0.0",
+		"typescript": "^4.3.2"
 	},
 	"files": [
 		"dist/**",
