@@ -1,5 +1,5 @@
 import { ActivityType, Client, ClientOptions } from 'discord.js';
-import { CommandHandler, EstablishedMemberHandler, RoleHandler, EventHandler } from '../Handlers';
+import { CommandHandler, EstablishedMemberHandler, RoleHandler, AmaHandler } from '../Handlers';
 import { configDiscordClient } from './Config';
 import APoD from '../../Commands/APoD';
 import XKCD from '../../Commands/XKCD';
@@ -24,7 +24,7 @@ export default class Rocinante extends Client {
 	public commandHandler: CommandHandler;
 	public readonly roleManager: RoleHandler;
 	public readonly establishedMemberHandler: EstablishedMemberHandler;
-	public readonly eventHandler: EventHandler;
+	public readonly amaHandler: AmaHandler;
 
 	public constructor(clientOptions?: ClientOptions) {
 		super(clientOptions);
@@ -51,7 +51,7 @@ export default class Rocinante extends Client {
 			configDiscordClient.establishedMemberExcludedCategories,
 			configDiscordClient.guild
 		);
-		this.eventHandler = new EventHandler(
+		this.amaHandler = new AmaHandler(
 			this,
 			configDiscordClient.amaChannel
 		);
@@ -85,7 +85,7 @@ export default class Rocinante extends Client {
 			await this.roleManager.init();
 			await this.establishedMemberHandler.init();
 			this.commandHandler.init([ APoD, XKCD, Avasarala, Miller ]);
-			await this.eventHandler.init();
+			this.amaHandler.init();
 
 			logger.info('The Rocinante is Ready');
 			this.ready = true;
