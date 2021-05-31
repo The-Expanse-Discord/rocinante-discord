@@ -51,7 +51,8 @@ export default class Rocinante extends Client {
 			configDiscordClient.establishedMemberExcludedCategories,
 			configDiscordClient.guild
 		);
-		this.eventHandler = new EventHandler(this,
+		this.eventHandler = new EventHandler(
+			this,
 			configDiscordClient.amaChannel
 		);
 
