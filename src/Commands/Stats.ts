@@ -33,7 +33,7 @@ export default class Stats extends Command {
 		if (guild && args.length > 0) {
 			if (guild.members.fetch(args[0])) {
 				guildMember = await guild.members.fetch(args[0]);
-			}			
+			}	
 		} else if (guild) {
 			guildMember = message.member;
 		} else {
@@ -50,25 +50,28 @@ export default class Stats extends Command {
 			)
 				.sort((a: Role, b: Role) => b.position - a.position);
 			
-			const roles: Role[] = Array();
+			const roles: Role[] = [];
 			let rolesString: string = '*none*';
 			let status: string = guildMember.presence.status;
 
 			// iterate through user roles
 			memberRoles.forEach((el: Role) => {
-				if (el.name !== '@everyone')
+				if (el.name !== '@everyone') {
 					roles.push(el);
+				}
 			});
 
 			// make sure roles isn't empty
-			if (roles.length > 0)
+			if (roles.length > 0) {
 				rolesString = roles.join(', ');
+			}
 
 			// update status string, based on original status
-			if (status === 'dnd')
+			if (status === 'dnd') {
 				status = 'Do Not Disturb';
-			else
+			} else {
 				status = `${ status.charAt(0).toUpperCase() + status.slice(1) }`;
+			}
 
 			// build the embed
 			const embed: MessageEmbed = (new MessageEmbed)
