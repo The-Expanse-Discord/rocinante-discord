@@ -33,7 +33,7 @@ export default class Stats extends Command {
 		if (guild && args.length > 0) {
 			if (guild.members.fetch(args[0])) {
 				guildMember = await guild.members.fetch(args[0]);
-			}	
+			}
 		} else if (guild) {
 			guildMember = message.member;
 		} else {
@@ -49,7 +49,7 @@ export default class Stats extends Command {
 				Array.from(guildMember.roles.cache.entries())
 			)
 				.sort((a: Role, b: Role) => b.position - a.position);
-			
+
 			const roles: Role[] = [];
 			let rolesString: string = '*none*';
 			let status: string = guildMember.presence.status;
