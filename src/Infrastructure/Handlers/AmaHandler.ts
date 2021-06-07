@@ -25,7 +25,7 @@ export class AmaHandler {
 
 	public async processMessage(message: Message): Promise<void> {
 		if (message.channel.id === this.amaChannel) {
-			await message.react('😄');
+			await message.react('🚀');
 		}
 	}
 }
