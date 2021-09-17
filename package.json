@@ -2,7 +2,7 @@
 	"name": "@the-expanse-discord/rocinante-discord",
 	"description": "General purpose bot for The Expanse Discord server.",
 	"main": "bin/index.js",
-	"version": "3.1.13",
+	"version": "3.1.14",
 	"license": "MIT",
 	"author": "kata-gatame <nathan@kata.codes>",
 	"contributors": [
