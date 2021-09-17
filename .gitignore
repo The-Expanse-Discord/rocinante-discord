@@ -10,3 +10,6 @@ config.json5
 
 # default local data file
 database.json
+
+# Ignore any locally created log files
+*.log

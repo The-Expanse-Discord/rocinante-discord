@@ -25,7 +25,19 @@ Put the following in a file named config.json5:
 	// A map from servers to reaction channels
 	"welcomeChannels": {
         "{SERVER_ID}": "{CHANNEL_ID}",
-    }
+    },
+	// Database to track if member is established
+	"establishedMemberJsonFile": "{JSON_FILE}",
+	// Role to give members that have done enough to be 'established'
+    "establishedMemberRole": "{ESTABLISHED_MEMBER_ROLE_NAME}",
+	// categories where messages don't count towards whether you are an established member
+	"establishedMemberExcludedCategories": [],
+	// The "moderator" user that people can message with questions
+    "moderatorUserId": "USER_ID",
+	// A channel where the bot will watch and react with a rocket ship for voting
+    "amaChannel": "CHANNEL_ID",
+	// A file to log to. Note that these will be rotated by wintston
+    "logFile": "test.log",
 }
 ```
 
