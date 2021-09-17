@@ -9,7 +9,8 @@ import {
 	TextChannel,
 	Collection,
 	Guild,
-	GuildEmoji
+	GuildEmoji,
+	GuildChannel
 } from 'discord.js';
 import { Emoji } from '../Enums/Role Assignment';
 import Rocinante from '../Client/Rocinante';
@@ -65,6 +66,7 @@ export class RoleHandler {
 					this.ensureShowEmbed(channel, messages),
 					this.ensureBookEmbed(channel, messages),
 					this.ensureNovellaEmbed(channel, messages),
+					this.ensureLeviathanFallsEmbed(channel, messages),
 				]);
 				await this.ensureFinalMessage(channel, messages);
 			})
@@ -197,7 +199,6 @@ export class RoleHandler {
 			Emoji.BabylonsAshes,
 			Emoji.PersepolisRising,
 			Emoji.TiamatsWrath,
-			Emoji.LeviathanFalls,
 		]);
 		return message;
 	}
@@ -261,6 +262,25 @@ export class RoleHandler {
 			Emoji.CurrentAll,
 			Emoji.CurrentShow,
 			Emoji.CurrentBook,
+		]);
+		return message;
+	}
+
+	private async ensureLeviathanFallsEmbed(channel: TextChannel, messages: Collection<string, Message>) :
+	Promise<Message> {
+		const leviathanFallsChannel: GuildChannel | undefined =
+			channel.guild.channels.cache.find(maybeLeviathanFalls => maybeLeviathanFalls.name === 'leviathan-falls');
+		const leviathanFallsId : string = leviathanFallsChannel?.id || '';
+		const description: string = 'A sample of Leviathan Falls, the last book in The Expanse series' +
+			', is now available on Amazon! The entire book will be released on November 16. To discuss' +
+			`it, assign yourself the Leviathan Falls role below and then go to <#${ leviathanFallsId }>. ` +
+			'Right' +
+			' now, Leviathan Falls can only be discussed in its own channel. Please be very careful not' +
+			' to post spoilers anywhere else.';
+		const message: Message =
+			await this.ensureEmbed(channel, messages, 'Leviathan Falls', description, 'https://i.imgur.com/HEaY2WU.png');
+		await this.reactWith(message, [
+			Emoji.LeviathanFalls,
 		]);
 		return message;
 	}
