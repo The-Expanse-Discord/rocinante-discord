@@ -197,6 +197,7 @@ export class RoleHandler {
 			Emoji.BabylonsAshes,
 			Emoji.PersepolisRising,
 			Emoji.TiamatsWrath,
+			Emoji.LeviathanFalls,
 		]);
 		return message;
 	}
