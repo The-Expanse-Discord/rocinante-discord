@@ -238,6 +238,7 @@ export class RoleHandler {
 			Emoji.Season3,
 			Emoji.Season4,
 			Emoji.Season5,
+			Emoji.Season6,
 		]);
 		return message;
 	}
