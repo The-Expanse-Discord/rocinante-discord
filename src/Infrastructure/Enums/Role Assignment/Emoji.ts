@@ -21,6 +21,7 @@ export enum Emoji {
 	PersepolisRising = 'PersepolisRising',
 	TiamatsWrath = 'TiamatsWrath',
 	LeviathanFalls = 'LeviathanFalls',
+	TheSinsOfOurFathers = 'TheSinsOfOurFathers',
 	Auberon = 'Auberon',
 	Season1 = 'Season1',
 	Season2 = 'Season2',
