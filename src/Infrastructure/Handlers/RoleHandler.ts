@@ -10,7 +10,6 @@ import {
 	Collection,
 	Guild,
 	GuildEmoji,
-	GuildChannel
 } from 'discord.js';
 import { Emoji } from '../Enums/Role Assignment';
 import Rocinante from '../Client/Rocinante';
@@ -66,7 +65,6 @@ export class RoleHandler {
 					this.ensureShowEmbed(channel, messages),
 					this.ensureBookEmbed(channel, messages),
 					this.ensureNovellaEmbed(channel, messages),
-					this.ensureLeviathanFallsEmbed(channel, messages),
 				]);
 				await this.ensureFinalMessage(channel, messages);
 			})
@@ -189,7 +187,7 @@ export class RoleHandler {
 		const description: string = 'Currently reading the novels? Select the books you’ve completed, and you’ll be ' +
 			'able to see the channels corresponding to each of them. As you progress through the series, you can ' +
 			'come back and select more roles. ';
-		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse Books', description, 'https://i.imgur.com/BHfnxXr.png');
+		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse Books', description, 'https://cdn.discordapp.com/attachments/842120973071417416/952981229362368593/Books_Grid_New.png');
 		await this.reactWith(message, [
 			Emoji.LeviathanWakes,
 			Emoji.CalibansWar,
@@ -199,6 +197,7 @@ export class RoleHandler {
 			Emoji.BabylonsAshes,
 			Emoji.PersepolisRising,
 			Emoji.TiamatsWrath,
+			Emoji.LeviathanFalls,
 		]);
 		return message;
 	}
@@ -212,7 +211,7 @@ export class RoleHandler {
 			messages,
 			'The Expanse Novellas & Short Stories',
 			description,
-			'https://i.imgur.com/VhSPt4w.png'
+			'https://cdn.discordapp.com/attachments/842120973071417416/952981230079582268/Novellas_Grid_New.png'
 		);
 		await this.reactWith(message, [
 			Emoji.TheButcherOfAndersonStation,
@@ -232,7 +231,7 @@ export class RoleHandler {
 		const description: string = 'Watching the show for the first time? Select the seasons you’ve seen, ' +
 			'and you’ll be able to see the channels corresponding to each of them. As you progress through the show, ' +
 			'you can come back and select more roles.';
-		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse Show', description, 'https://i.imgur.com/57CXARX.png');
+		const message: Message = await this.ensureEmbed(channel, messages, 'The Expanse Show', description, 'https://cdn.discordapp.com/attachments/842120973071417416/952981230872309760/Seasons_Grid_New.png');
 		await this.reactWith(message, [
 			Emoji.Season1,
 			Emoji.Season2,
@@ -264,25 +263,6 @@ export class RoleHandler {
 			Emoji.CurrentAll,
 			Emoji.CurrentShow,
 			Emoji.CurrentBook,
-		]);
-		return message;
-	}
-
-	private async ensureLeviathanFallsEmbed(channel: TextChannel, messages: Collection<string, Message>) :
-	Promise<Message> {
-		const leviathanFallsChannel: GuildChannel | undefined =
-			channel.guild.channels.cache.find(maybeLeviathanFalls => maybeLeviathanFalls.name === 'leviathan-falls');
-		const leviathanFallsId : string = leviathanFallsChannel?.id || '';
-		const description: string = 'A sample of Leviathan Falls, the last book in The Expanse series' +
-			', is now available on Amazon! The entire book will be released on November 16. To discuss' +
-			`it, assign yourself the Leviathan Falls role below and then go to <#${ leviathanFallsId }>. ` +
-			'Right' +
-			' now, Leviathan Falls can only be discussed in its own channel. Please be very careful not' +
-			' to post spoilers anywhere else.';
-		const message: Message =
-			await this.ensureEmbed(channel, messages, 'Leviathan Falls', description, 'https://i.imgur.com/HEaY2WU.png');
-		await this.reactWith(message, [
-			Emoji.LeviathanFalls,
 		]);
 		return message;
 	}
