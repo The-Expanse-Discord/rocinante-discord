@@ -9,7 +9,7 @@ import {
 	TextChannel,
 	Collection,
 	Guild,
-	GuildEmoji,
+	GuildEmoji
 } from 'discord.js';
 import { Emoji } from '../Enums/Role Assignment';
 import Rocinante from '../Client/Rocinante';
