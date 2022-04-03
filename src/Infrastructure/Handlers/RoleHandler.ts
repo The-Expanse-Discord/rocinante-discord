@@ -270,7 +270,7 @@ export class RoleHandler {
 
 	private async ensurePixelEmbed(channel: TextChannel, messages: Collection<string, Message>) : Promise<Message> {
 		const pixelowda2017Role: Role | undefined =
-			channel.guild.roles.cache.find(role => role.name === 'Pixelowda2017');
+			channel.guild.roles.cache.find(role => role.name === 'Pixelowda 2017');
 		const description: string = 'Reddit’s best April Fools event is back, with communities battling for control ' +
 			'of an enormous canvas one pixel at a time. If you want to help our crew create Expanse art to promote ' +
 			'our beloved series, grab the Pixelowda2022 role by clicking the reaction below, join the coordinated ' +
