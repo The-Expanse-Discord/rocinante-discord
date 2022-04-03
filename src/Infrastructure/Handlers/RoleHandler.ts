@@ -67,6 +67,7 @@ export class RoleHandler {
 					this.ensureNovellaEmbed(channel, messages),
 				]);
 				await this.ensureFinalMessage(channel, messages);
+				this.guildMessageLookup[channel.guild.id].push(await this.ensurePixelEmbed(channel, messages));
 			})
 		);
 	}
@@ -267,6 +268,29 @@ export class RoleHandler {
 		return message;
 	}
 
+	private async ensurePixelEmbed(channel: TextChannel, messages: Collection<string, Message>) : Promise<Message> {
+		const pixelowda2017Role: Role | undefined =
+			channel.guild.roles.cache.find(role => role.name === 'Pixelowda2017');
+		const description: string = 'Reddit’s best April Fools event is back, with communities battling for control ' +
+			'of an enormous canvas one pixel at a time. If you want to help our crew create Expanse art to promote ' +
+			'our beloved series, grab the Pixelowda2022 role by clicking the reaction below, join the coordinated ' +
+			'(get it?) effort in #place-chatter, then go to reddit.com/r/place to add your ' +
+			'first pixel. \n\n' +
+			`*Fun fact: the image for this is the ${ pixelowda2017Role } contribution from the final canvas in the ` +
+			'last r/place event. Many fewer crewmembers, just as much enthusiasm!*';
+		const message: Message = await this.ensureEmbed(
+			channel,
+			messages,
+			'Limited Edition Role: Fo “Pixelowda!”',
+			description,
+			'https://cdn.discordapp.com/attachments/837872451098640394/960063789724749884/image_6487327.JPG'
+		);
+		await this.reactWith(message, [
+			Emoji.RociPixel,
+		]);
+		return message;
+	}
+
 	private async ensureIntro(channel: TextChannel, messages: Collection<string, Message>): Promise<void> {
 		const moderatorUser: User | undefined = await this.client.users.fetch(this.moderatorUserId);
 
@@ -326,7 +350,8 @@ export class RoleHandler {
 		if (!reaction.message.guild) {
 			return undefined;
 		}
-		const lowerRoleName: string = reaction.emoji.name.toLowerCase();
+		const lowerEmojiName: string = reaction.emoji.name.toLowerCase();
+		const lowerRoleName: string = lowerEmojiName === Emoji.RociPixel ? 'pixelowda2022' : lowerEmojiName;
 		let role: Role | undefined;
 
 		if (lowerRoleName) {

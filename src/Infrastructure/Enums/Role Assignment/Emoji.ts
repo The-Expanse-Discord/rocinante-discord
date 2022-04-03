@@ -33,4 +33,6 @@ export enum Emoji {
 	CurrentBook = 'CurrentBook',
 	CurrentShow = 'CurrentShow',
 	CurrentAll = 'CurrentAll',
+
+	RociPixel = 'roci_pixel',
 }
